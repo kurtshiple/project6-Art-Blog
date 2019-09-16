@@ -4,41 +4,48 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <script src="https://use.fontawesome.com/releases/v5.0.8/js/all.js"></script>
+    <script src="https://use.fontawesome.com/releases/v5.0.11/js/all.js"></script>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <link rel="stylesheet" href="css/styles.css">
     <title>Document</title>
 </head>
 <body>
     <!-- NAVBAR -->
-    <nav class="navbar navbar-expand-lg bg-dark">
+    <div style="height: 10px; background: #27aae1;"></div>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <div class="container">
             <a href="#" class="navbar-brand">MARYSART.COM</a>
+            <button class="navbar-toggler" data-toggle="collapse" data-target="#navbarcollapseCMS">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarcollapseCMS">
             <ul class="navbar-nav mr-auto">
                 <li class="nav-item">
                     <a href="MyProfile.php" class="nav-link"><i class="fas fa-user"></i> My Profile</a>
                 </li>
                 <li class="nav-item">
-                    <a href="Posts.php" class="nav-link">Posts</a>
+                    <a href="Posts.php" class="nav-link"><i class="fas fa-align-left"></i> Posts</a>
                 </li>
                 <li class="nav-item">
-                    <a href="Categories.php" class="nav-link">Categories</a>
+                    <a href="Categories.php" class="nav-link"><i class="fas fa-th-large"></i> Categories</a>
                 </li>
                 <li class="nav-item">
-                    <a href="Admins.php" class="nav-link">Manage Admins</a>
+                    <a href="Admins.php" class="nav-link"><i class="fas fa-users-cog"></i> Manage Admins</a>
                 </li>
                 <li class="nav-item">
-                    <a href="Comments.php" class="nav-link">Comments</a>
+                    <a href="Comments.php" class="nav-link"><i class="fas fa-comments"></i> Comments</a>
                 </li>
                 <li class="nav-item">
-                    <a href="Blog.php?page=1" class="nav-link">Live Blog</a>
+                    <a href="Blog.php?page=1" class="nav-link"><i class="fab fa-elementor"></i> Live Blog</a>
                 </li>
             </ul>
             <ul class="navbar-nav ml-auto">
-                <li class="nav-item"><a href="Logout.php" class="nav-link"><i class="fas fa-user-times"></i> Logout</a></li>
+                <li class="nav-item"><a href="Logout.php" class="nav-link text-danger"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
             </ul>
+            </div>
         </div>
     </nav>
+    <div style="height: 10px; background: #27aae1;"></div>
 
 
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
