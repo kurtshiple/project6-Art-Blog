@@ -1,39 +1,50 @@
 <?php require_once("includes/DB.php"); ?>
 <?php require_once("includes/Functions.php"); ?>
 <?php require_once("includes/sessions.php"); ?>
+
 <?php if(isset($_POST["Submit"])){
+
     
-    $Category = $_POST["CategoryTitle"];
+    $PostTitle = $_POST["PostTitle"];
+    $Category = $_POST["Category"];
+    $Image = $_FILES["Image"]["name"];
+    $Target = "uploads/";
+    $PostText = $_POST["PostDescription"];
     $Admin = "Kurt"; 
     date_default_timezone_set("America/New_York");
     $CurrentTime=time();
     $DateTime=strftime("%B-%d-%Y %H:%M:%S",$CurrentTime);
         
-    if(empty($Category)){
-        $_SESSION["ErrorMessage"]= "All Fields Must Be Filled Out";
-        Redirect_to("categories.php");       
-    }elseif(strlen($Category)<3){
-        $_SESSION["ErrorMessage"]= "Category Title Must Be Greater Than 2 Characters";
-        Redirect_to("categories.php");   
-    }elseif(strlen($Category)>49){
-        $_SESSION["ErrorMessage"]= "Category Title Must Be Less Than 50 Characters";
-        Redirect_to("categories.php");   
+    if(empty($PostTitle)){
+        $_SESSION["ErrorMessage"]= "Title Can't Be Empty";
+        Redirect_to("AddNewPost.php");       
+    }elseif(strlen($PostTitle)<3){
+        $_SESSION["ErrorMessage"]= "Post Title Must Be Greater Than 2 Characters";
+        Redirect_to("AddNewPost.php");   
+    }elseif(strlen($PostText)>9999){
+        $_SESSION["ErrorMessage"]= "Post Description Must Be Less Than 10000 Characters";
+        Redirect_to("AddNewPost.php");   
     }else{
+        //query to insert post in DB when everything is fine
         global $ConnectingDB;
-        $sql = "INSERT INTO category(title,author,datetime)";
-        $sql .= "VALUES(:categoryName,:adminName,:dateTime)";
+        $sql = "INSERT INTO posts(datetime,title,category,author,image,post)";
+        $sql .= "VALUES(:dateTime,:postTitle,:categoryName,:adminName,:imageName,:postDescription)";
         $stmt = $ConnectingDB->prepare($sql);
+        $stmt->bindValue(':dateTime',$DateTime);
+        $stmt->bindValue(':postTitle',$PostTitle);
         $stmt->bindValue(':categoryName',$Category);
         $stmt->bindvalue(':adminName',$Admin);
-        $stmt->bindValue(':dateTime',$DateTime);
+        $stmt->bindValue(':imageName',$Image);
+        $stmt->bindValue(':postDescription',$PostText);
         $Execute=$stmt->execute();
+        move_uploaded_file ($_FILES["File"]["tmp_name"], $Target);
 
     if($Execute){
-        $_SESSION["SuccessMessage"]="Category with id : ".$ConnectingDB->lastInsertId()." Added Successfully";
-        Redirect_to("categories.php");
+        $_SESSION["SuccessMessage"]="Post with id : ".$ConnectingDB->lastInsertId()." Added Successfully";
+        Redirect_to("AddNewPost.php");
     }else {
         $_SESSION["ErrorMessage"]="Something went wrong. Try again!";
-        Redirect_to("categories.php");
+        Redirect_to("AddNewPost.php");
     }
   
   }
@@ -50,7 +61,7 @@
     <script src="https://use.fontawesome.com/releases/v5.0.11/js/all.js"></script>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <link rel="stylesheet" href="css/styles.css">
-    <title>Categories</title>
+    <title>Add New Post</title>
 </head>
 <body>
     <!-- NAVBAR -->
@@ -96,7 +107,7 @@
         <div class="container">
             <div class="row">
                 <div class="col-md-12">
-                <h1><i class="fas fa-edit" style="color:#27aae1;"></i> Manage Categories</h1>
+                <h1><i class="fas fa-edit" style="color:#27aae1;"></i> Add New Post</h1>
                 </div>
             </div>
         </div>
@@ -112,21 +123,58 @@
                       echo SuccessMessage();
                 ?>
                 
-                <form class="" action="categories.php" method="post">
-                    <div class="card bg-secondary text-light mb-3 mt-3">
-                        <div class="card-header">
-                            <h1>
-                            Add New Category
-                            </h1>
-                        </div>
+                <form class="" action="AddNewPost.php" method="post" enctype="multipart/form-data">
+                    <div class="card bg-secondary text-light mb-3 mt-3" style="height: auto;">
                         <div class="card-body bg-dark">
                             <div class="form-group">
                                 <label for="Title">
                                     <span class="FieldInfo">
-                                    Category Title:
+                                    Post Title:
                                     </span>
                                 </label>
-                                <input class="form-control" type:"text" name="CategoryTitle" id="title" placeholder="Type title here" value="">
+                                <input class="form-control" type:"text" name="PostTitle" id="title" placeholder="Type title here" value="">
+                            </div>
+                            <hr>
+                            <div class="form-group">
+                                <label for="CategoryTitle">
+                                    <span class="FieldInfo">
+                                    Choose Category
+                                    </span>
+                                </label>
+                                <select class="form-control" id="CategoryTitle" name="Category">     
+                                    <?php
+                                    //Fetching all the categories from the category table
+                                    global $ConnectingDB;
+                                    $sql = "SELECT * FROM category";
+                                    $stmt = $ConnectingDB->query($sql);
+                                    while ($DateRows = $stmt->fetch()) {
+                                        $Id = $DateRows["id"];
+                                        $CategoryName = $DateRows["title"];
+                                
+                                    ?>
+                                    <option> <?php echo $CategoryName; ?></option>
+                                <?php } ?>
+                                </select>
+                            </div>
+                            <hr>
+                            <div class="form-group mb-1">
+                                <div class="custom-file">
+                                    <input class="custom-file-input" type="File" accept="image/*" onchange="preview_image(event)" name="Image" id="imageSelect" value="" />
+                                    <label for="imageSelect" class="custom-file-label">Select Image</label>
+                                    
+                                </div>
+                                <hr>
+                                <div id="wrapper">
+                                    <img id="output_image"/>
+                                </div>
+                                <hr>
+                            <div class="form-group">
+                               <label for="Post">
+                                    <span class="FieldInfo">
+                                    Post:
+                                    </span>
+                                </label>
+                                <textarea class="form-control" id="Post" name="PostDescription" rows="8" cols="80"></textarea>
                             </div>
                             <div class="row">
                                 <div class="col-lg-6 mb-2">
@@ -142,6 +190,9 @@
                             </div>
                         </div>
                     </div>
+                        
+                    </div>
+    
                 </form>
             
             </div> 
@@ -179,5 +230,17 @@
     <script>
         $('#year').text(new Date().getFullYear());
     </script>
+    <script type='text/javascript'>
+        function preview_image(event) 
+        {
+         var reader = new FileReader();
+         reader.onload = function()
+         {
+          var output = document.getElementById('output_image');
+          output.src = reader.result;
+         }
+         reader.readAsDataURL(event.target.files[0]);
+        }
+</script>
 </body>
 </html>

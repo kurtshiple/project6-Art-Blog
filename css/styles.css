@@ -3,3 +3,14 @@
     font-family: Bitter, Georgia, "Times New Roman",Times, serif;
     font-size: 1.2em;
 }
+
+#wrapper{
+ text-align:center;
+ margin:10px auto;
+ padding:10px;
+ width:100%;
+ 
+}
+#output_image{
+ max-width:100%;
+}
