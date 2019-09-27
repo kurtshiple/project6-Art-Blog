@@ -1,14 +1,26 @@
 <?php require_once("includes/DB.php"); ?>
 <?php require_once("includes/Functions.php"); ?>
+<?php require_once("includes/sessions.php"); ?>
 <?php if(isset($_POST["Submit"])){
-    $Category = $_POST["CategoryTitle"]
+    
+    $Category = $_POST["CategoryTitle"];
+    $Admin = "Kurt"; 
         
     if(empty($Category)){
-        Error = "All Fields Must Be Filled Out";
-        Redirect_to("categories.php");
+        $_SESSION["ErrorMessage"]= "All Fields Must Be Filled Out";
+        Redirect_to("categories.php");       
+    }elseif(strlen($Category)<3){
+        $_SESSION["ErrorMessage"]= "Category Title Must Be Greater Than 2 Characters";
+        Redirect_to("categories.php");   
+    }elseif(strlen($Category)>49){
+        $_SESSION["ErrorMessage"]= "Category Title Must Be Less Than 50 Characters";
+        Redirect_to("categories.php");   
+    }else{
         
     }
 }
+
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -76,6 +88,10 @@
     <section class="container py-2 mb-4">
         <div class="row">
             <div class="offset-lg-1 col-lg-10" style="min-height: 450px;">
+                <?php echo ErrorMessage();
+                      echo SuccessMessage();
+                ?>
+                
                 <form class="" action="categories.php" method="post">
                     <div class="card bg-secondary text-light mb-3 mt-3">
                         <div class="card-header">
@@ -99,7 +115,7 @@
                                     </a>
                                 </div>
                                 <div class="col-lg-6 mb-2">
-                                    <button type="button" name="Submit" class="btn btn-success btn-block">
+                                    <button type="submit" name="Submit" class="btn btn-success btn-block">
                                         <i class="fas fa-check"></i> Publish
                                     </button>
                                 </div>
