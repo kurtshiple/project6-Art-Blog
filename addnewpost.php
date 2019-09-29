@@ -8,6 +8,7 @@
     $PostTitle = $_POST["PostTitle"];
     $Category = $_POST["Category"];
     $Image = $_FILES["Image"]["name"];
+    echo $Image;
     $Target = "uploads/";
     $PostText = $_POST["PostDescription"];
     $Admin = "Kurt"; 
@@ -37,7 +38,7 @@
         $stmt->bindValue(':imageName',$Image);
         $stmt->bindValue(':postDescription',$PostText);
         $Execute=$stmt->execute();
-        move_uploaded_file ($_FILES["File"]["tmp_name"], $Target);
+        move_uploaded_file ($_FILES["Image"]["tmp_name"], $Target.$Image);
 
     if($Execute){
         $_SESSION["SuccessMessage"]="Post with id : ".$ConnectingDB->lastInsertId()." Added Successfully";
@@ -58,7 +59,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <script src="https://use.fontawesome.com/releases/v5.0.11/js/all.js"></script>
+    <script src="https://kit.fontawesome.com/baf56a4085.js" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <link rel="stylesheet" href="css/styles.css">
     <title>Add New Post</title>
@@ -75,22 +76,25 @@
             <div class="collapse navbar-collapse" id="navbarcollapseCMS">
             <ul class="navbar-nav mr-auto">
                 <li class="nav-item">
-                    <a href="MyProfile.php" class="nav-link"><i class="fas fa-user"></i> My Profile</a>
+                    <a href="myprofile.php" class="nav-link"><i class="fas fa-user"></i> My Profile</a>
                 </li>
                 <li class="nav-item">
-                    <a href="Posts.php" class="nav-link"><i class="fas fa-align-left"></i> Posts</a>
+                    <a href="dashboard.php" class="nav-link"><i class="fas fa-desktop"></i> Dashboard</a>
                 </li>
                 <li class="nav-item">
-                    <a href="Categories.php" class="nav-link"><i class="fas fa-th-large"></i> Categories</a>
+                    <a href="posts.php" class="nav-link"><i class="fas fa-align-left"></i> Posts</a>
                 </li>
                 <li class="nav-item">
-                    <a href="Admins.php" class="nav-link"><i class="fas fa-users-cog"></i> Manage Admins</a>
+                    <a href="categories.php" class="nav-link"><i class="fas fa-th-large"></i> Categories</a>
                 </li>
                 <li class="nav-item">
-                    <a href="Comments.php" class="nav-link"><i class="fas fa-comments"></i> Comments</a>
+                    <a href="admins.php" class="nav-link"><i class="fas fa-users-cog"></i> Manage Admins</a>
                 </li>
                 <li class="nav-item">
-                    <a href="Blog.php?page=1" class="nav-link"><i class="fab fa-elementor"></i> Live Blog</a>
+                    <a href="comments.php" class="nav-link"><i class="fas fa-comments"></i> Comments</a>
+                </li>
+                <li class="nav-item">
+                    <a href="blog.php" class="nav-link"><i class="fab fa-elementor"></i> Live Blog</a>
                 </li>
             </ul>
             <ul class="navbar-nav ml-auto">
@@ -138,7 +142,7 @@
                             <div class="form-group">
                                 <label for="CategoryTitle">
                                     <span class="FieldInfo">
-                                    Choose Category
+                                    Choose Category:
                                     </span>
                                 </label>
                                 <select class="form-control" id="CategoryTitle" name="Category">     
