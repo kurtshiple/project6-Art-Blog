@@ -14,3 +14,8 @@
 #output_image{
  max-width:100%;
 }
+#editdeletebutton{
+    height: 30px;
+    width: 30px;
+
+}

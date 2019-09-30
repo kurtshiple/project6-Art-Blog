@@ -1,6 +1,46 @@
 <?php require_once("includes/DB.php"); ?>
 <?php require_once("includes/Functions.php"); ?>
 <?php require_once("includes/sessions.php"); ?>
+<?php $SearchQueryParameter = $_GET["id"]; ?>
+<?php if(isset($_POST["Submit"])){
+    
+    $Name = $_POST["CommenterName"];
+    $Email = $_POST["CommenterEmail"];
+    $Comment = $_POST["CommenterText"];
+    date_default_timezone_set("America/New_York");
+    $CurrentTime=time();
+    $DateTime=strftime("%B-%d-%Y %H:%M:%S",$CurrentTime);
+        
+    if(empty($Name)||empty($Email)||empty($Comment)){
+        $_SESSION["ErrorMessage"]= "All Fields Must Be Filled Out";
+        Redirect_to("fullpost.php?id={$SearchQueryParameter}");       
+    }elseif(strlen($Comment)>1000){
+        $_SESSION["ErrorMessage"]= "Comment length should be less than 1,000 characters";
+        Redirect_to("fullpost.php?id={$SearchQueryParameter}");   
+    }else{
+        // query to insert comment in DB when everything is fine.
+        global $ConnectingDB;
+        $sql = "INSERT INTO comments(datetime,name,email,comment,approvedby,status)";
+        $sql .= "VALUES(:dateTime,:name,:email,:comment,'pending','OFF')";
+        $stmt = $ConnectingDB->prepare($sql);
+        $stmt->bindValue(':dateTime',$DateTime);
+        $stmt->bindvalue(':name',$Name);
+        $stmt->bindValue(':email',$Email);
+        $stmt->bindValue(':comment',$Comment);
+        $Execute=$stmt->execute();
+
+    if($Execute){
+        $_SESSION["SuccessMessage"]="Comment Submitted Successfully";
+        Redirect_to("fullpost.php?id={$SearchQueryParameter}"); 
+    }else {
+        $_SESSION["ErrorMessage"]="Something went wrong. Try again!";
+        Redirect_to("fullpost.php?id={$SearchQueryParameter}"); 
+    }
+  
+  }
+    
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -55,12 +95,17 @@
     <!-- NAVBAR END -->
 
     <!--- HEADER -->
-    <div class="container">
+    <div class="container mt-3 mb-3">
    
         <div class="row">
        
             <!-- Main Area Start -->
             <div class="col-sm-8" style="min-height:40px; background:rgb(250,250,250);">
+                <hr>
+                <?php
+                    echo ErrorMessage();
+                    echo SuccessMessage();
+                ?>
                 <hr>
                 <h1>Complete Responsive CMS Art Blog</h1>
                 <h1 class="lead">PHP, HTML, Bootstrap, and MySQL</h1>
@@ -99,11 +144,11 @@
                     
                 
                 ?>
-                <div class="card text-white bg-secondary mb-3">
+                <div class="card mb-3">
                     <img src="uploads/<?php echo htmlentities($Image); ?>" style="max-height:450px; padding:10px" class="img-fluid card-img-top"/>
                     <div class="card-body">
                         <h4 class="card-title"><?php echo htmlentities($PostTitle); ?></h4>
-                        <small class="text-white">By <?php echo htmlentities($Admin); ?> On <?php echo htmlentities($DateTime); ?></small>
+                        <small>By <?php echo htmlentities($Admin); ?> On <?php echo htmlentities($DateTime); ?></small>
                         <span style="float:right;" class="badge badge-dark text-light">Comments 20</span>
                         
                         <hr>
@@ -115,11 +160,49 @@
                 <hr>
                 <?php } ?>
                 <hr>
-            
+                
+                <!-- Comment Area Start -->
+                
+                <div>
+                <form class="" action="fullpost.php?id=<?php echo $SearchQueryParameter ?>" method="post">
+                    <div class="card mb-3">
+                        <div class="card-header" style="padding:20px;">
+                            <h5 class="FieldInfo"> Comments</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="form-group">
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text"><i class="fas fa-user"></i></span>
+                                    </div>
+                                    <input class="form-control" type="text" name="CommenterName" placeholder="Name" value="">
+
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text"><i class="fas fa-envelope"></i></span>
+                                    </div>
+                                    <input class="form-control" type="email" name="CommenterEmail" placeholder="Email" value="">
+
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <textarea name="CommenterText" class="form-control" rows="6" cols="80"></textarea>
+                            </div>
+                            <div class="">
+                                <button type="submit" name="Submit" class="btn btn-primary">Submit</button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
             </div>
+            <!-- Comment Area End -->
             <!-- Main Area End -->
             
             
+            </div>
             <!-- Side Area Start -->
             <div class="col-sm-4" style="min-height:40px; background:green;">
             
@@ -128,10 +211,10 @@
             <!-- Side Area End -->
         </div>
     </div>
-    <!--- HEADER END -->
+
     
-    <!--- Main Area -->
-    <!--- Main Area End -->
+    <!--- HEADER END -->
+     
 
 
 

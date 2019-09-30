@@ -2,9 +2,10 @@
 <?php require_once("includes/Functions.php"); ?>
 <?php require_once("includes/sessions.php"); ?>
 
-<?php if(isset($_POST["Submit"])){
+<?php 
+$SearchQueryParameter = $_GET['id'];
+if(isset($_POST["Submit"])){
 
-    
     $PostTitle = $_POST["PostTitle"];
     $Category = $_POST["Category"];
     $Image = $_FILES["Image"]["name"];
@@ -18,34 +19,34 @@
         
     if(empty($PostTitle)){
         $_SESSION["ErrorMessage"]= "Title Can't Be Empty";
-        Redirect_to("AddNewPost.php");       
+        Redirect_to("editpost.php?id=$SearchQueryParameter");       
     }elseif(strlen($PostTitle)<3){
         $_SESSION["ErrorMessage"]= "Post Title Must Be Greater Than 2 Characters";
-        Redirect_to("AddNewPost.php");   
+        Redirect_to("editpost.php?id=$SearchQueryParameter");  
     }elseif(strlen($PostText)>9999){
         $_SESSION["ErrorMessage"]= "Post Description Must Be Less Than 10000 Characters";
-        Redirect_to("AddNewPost.php");   
+        Redirect_to("editpost.php?id=$SearchQueryParameter");   
     }else{
-        //query to insert post in DB when everything is fine
+        //query to update post in DB when everything is fine
         global $ConnectingDB;
-        $sql = "INSERT INTO posts(datetime,title,category,author,image,post)";
-        $sql .= "VALUES(:dateTime,:postTitle,:categoryName,:adminName,:imageName,:postDescription)";
-        $stmt = $ConnectingDB->prepare($sql);
-        $stmt->bindValue(':dateTime',$DateTime);
-        $stmt->bindValue(':postTitle',$PostTitle);
-        $stmt->bindValue(':categoryName',$Category);
-        $stmt->bindvalue(':adminName',$Admin);
-        $stmt->bindValue(':imageName',$Image);
-        $stmt->bindValue(':postDescription',$PostText);
-        $Execute=$stmt->execute();
+        if (!empty($_FILES["Image"]["name"])) {
+            $sql = "UPDATE posts 
+            SET title='$PostTitle', category='$Category', image='$Image', post='$PostText'
+            WHERE id='$SearchQueryParameter'";
+        }else {
+            $sql = "UPDATE posts 
+            SET title='$PostTitle', category='$Category', post='$PostText'
+            WHERE id='$SearchQueryParameter'";
+        }
+        $Execute = $ConnectingDB->query($sql);
         move_uploaded_file ($_FILES["Image"]["tmp_name"], $Target.$Image);
 
     if($Execute){
-        $_SESSION["SuccessMessage"]="Post with id : ".$ConnectingDB->lastInsertId()." Added Successfully";
-        Redirect_to("AddNewPost.php");
+        $_SESSION["SuccessMessage"]="Post Updated Successfully";
+        Redirect_to("posts.php");
     }else {
         $_SESSION["ErrorMessage"]="Something went wrong. Try again!";
-        Redirect_to("AddNewPost.php");
+        Redirect_to("posts.php");
     }
   
   }
@@ -127,9 +128,8 @@
                       echo SuccessMessage();
                       // fetching existing content to be edited 
                         global $ConnectingDB;
-                        $SearchQueryParameter = $_GET["id"];
                         $sql = "SELECT * FROM posts WHERE id='$SearchQueryParameter'";
-                        $stmt = $ConnectingDB -> query($sql);
+                        $stmt = $ConnectingDB->query($sql);
                         while ($DataRows=$stmt->fetch()) {
                         $TitleToBeUpdated = $DataRows['title'];
                         $CategoryToBeUpdated = $DataRows['category'];
@@ -138,13 +138,13 @@
                     }
                 ?>
                 
-                <form class="" action="AddNewPost.php" method="post" enctype="multipart/form-data">
+                <form class="" action="editpost.php?id=<?php echo $SearchQueryParameter; ?>" method="post" enctype="multipart/form-data">
                     <div class="card bg-secondary text-light mb-3 mt-3" style="height: auto;">
                         <div class="card-body bg-dark">
                             <div class="form-group">
                                 <label for="Title">
                                     <span class="FieldInfo">
-                                    Post Title:
+                                    Edit Post Title:
                                     </span>
                                 </label>
                                 <input class="form-control" type:"text" name="PostTitle" id="title" placeholder="Type title here" value="<?php echo $TitleToBeUpdated; ?>">
@@ -153,12 +153,12 @@
                             <div class="form-group">
                                 <label for="CategoryTitle">
                                     <span class="FieldInfo">
-                                    Existing Category:
+                                    Category:
                                     </span>
                                     <?php echo $CategoryToBeUpdated; ?>
                                     <hr>
                                     <span class="FieldInfo">
-                                    Choose Category:
+                                    Edit Category:
                                     </span>
                                 </label>
                                 <select class="form-control" id="CategoryTitle" name="Category">     
@@ -179,15 +179,19 @@
                             <hr>
                             <div class="form-group mb-1">
                                 <span class="FieldInfo">
-                                    Existing Image:
+                                    Image:
                                     </span>
                                     <div id="wrapper">
-                                        <img src="uploads/<?php echo $ImageToBeUpdated;?>"/>
+                                        <img src="uploads/<?php echo $ImageToBeUpdated;?>" style="max-width:100%;"/>
                                     </div>
+                                <hr>
+                                <span class="FieldInfo">
+                                    Edit Image:
+                                </span>
                                 <hr>
                                 <div class="custom-file">
                                     <input class="custom-file-input" type="File" accept="image/*" onchange="preview_image(event)" name="Image" id="imageSelect" value="" />
-                                    <label for="imageSelect" class="custom-file-label">Update Image</label>
+                                    <label for="imageSelect" class="custom-file-label">Select Image</label>
                                     
                                 </div>
                                 <hr>
@@ -198,7 +202,7 @@
                             <div class="form-group">
                                <label for="Post">
                                     <span class="FieldInfo">
-                                    Post:
+                                    Edit Post:
                                     </span>
                                 </label>
                                 <textarea class="form-control" id="Post" name="PostDescription" rows="8" cols="80">

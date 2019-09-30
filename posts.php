@@ -91,6 +91,10 @@
     <section class="container py-2 mb-4">
         <div class="row">
             <div class="col-lg-12">
+                <?php 
+                    echo ErrorMessage();
+                    echo SuccessMessage();
+                ?>
                 <table class="table table-striped table-hover">
                     <thead class="thead-dark">
                         <tr>
@@ -101,7 +105,8 @@
                             <th>Author</th>
                             <th>Banner</th>
                             <th>Comments</th>
-                            <th>Action</th>
+                            <th>Edit</th>
+                            <th>Delete</th>
                             <th>Live Preview</th>
                         </tr>
                     </thead>
@@ -162,12 +167,15 @@
                         <td>
                             Comments
                         </td>
-                        <td>
-                            <a href="editpost.php?id=<?php echo $Id ?>"><span class="btn btn-warning">Edit</span></a> 
-                            <a href="deletepost.php?id=<?php echo $Id ?>"><span class="btn btn-danger">Delete</span></a>
+                        <td style="height:10px; width:40px; margin:0;"> 
+                            <a href="editpost.php?id=<?php echo $Id ?>"><span class="btn btn-warning" style=" margin:0;">Edit</span></a>
                             
                         </td>
-                        <td>
+                        <td style="height:10px; width:40px; margin:0;"> 
+                            <a href="deletepost.php?id=<?php echo $Id ?>"><span class="btn btn-danger" style=" margin:0;">Delete</span></a>
+                            
+                        </td>
+                        <td style="height:10px; width:40px; margin:0;">
                             <a href="fullpost.php?id=<?php echo $Id; ?>" target="_blank"><span class="btn btn-primary">Live Preview</span></a>
                         </td>
                     </tr>
