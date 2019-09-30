@@ -3,37 +3,48 @@
 <?php require_once("includes/sessions.php"); ?>
 <?php if(isset($_POST["Submit"])){
     
-    $Category = $_POST["CategoryTitle"];
+    $UserName = $_POST["Username"];
+    
+    $Name = $_POST["Name"];
+
+    
+    $Password = $_POST["Password"];
+    
+    $ConfirmPassword = $_POST["ConfirmPassword"];
+    
     $Admin = "Kurt"; 
     date_default_timezone_set("America/New_York");
     $CurrentTime=time();
     $DateTime=strftime("%B-%d-%Y %H:%M:%S",$CurrentTime);
         
-    if(empty($Category)){
+    if(empty($UserName)||empty($Password)||empty($ConfirmPassword)){
         $_SESSION["ErrorMessage"]= "All Fields Must Be Filled Out";
-        Redirect_to("categories.php");       
-    }elseif(strlen($Category)<3){
-        $_SESSION["ErrorMessage"]= "Category Title Must Be Greater Than 2 Characters";
-        Redirect_to("categories.php");   
-    }elseif(strlen($Category)>49){
-        $_SESSION["ErrorMessage"]= "Category Title Must Be Less Than 50 Characters";
-        Redirect_to("categories.php");   
+        Redirect_to("admins.php");       
+    }elseif(strlen($Password)<4){
+        $_SESSION["ErrorMessage"]= "Password Must Be Greater Than 3 Characters";
+        Redirect_to("admins.php");   
+    }elseif($Password !== $ConfirmPassword){
+        $_SESSION["ErrorMessage"]= "Password and Confirm Password Must Match";
+        Redirect_to("admins.php");   
     }else{
+        //Query to insert new admin in DB when everything is fine.
         global $ConnectingDB;
-        $sql = "INSERT INTO category(title,author,datetime)";
-        $sql .= "VALUES(:categoryName,:adminName,:dateTime)";
+        $sql = "INSERT INTO admins(datetime,username,password,aname,addedby)";
+        $sql .= "VALUES(:dateTime,:userName,:password,:aName,:adminName)";
         $stmt = $ConnectingDB->prepare($sql);
-        $stmt->bindValue(':categoryName',$Category);
-        $stmt->bindvalue(':adminName',$Admin);
         $stmt->bindValue(':dateTime',$DateTime);
+        $stmt->bindValue(':userName',$UserName);
+        $stmt->bindvalue(':password',$Password);
+        $stmt->bindValue(':aName',$Name);
+        $stmt->bindValue(':adminName',$Admin);
         $Execute=$stmt->execute();
 
     if($Execute){
-        $_SESSION["SuccessMessage"]="Category with id : ".$ConnectingDB->lastInsertId()." Added Successfully";
-        Redirect_to("categories.php");
+        $_SESSION["SuccessMessage"]="New Admin With The Name ".$Name." Added Successfully";
+        Redirect_to("admins.php");
     }else {
         $_SESSION["ErrorMessage"]="Something went wrong. Try again!";
-        Redirect_to("categories.php");
+        Redirect_to("admins.php");
     }
   
   }
@@ -129,7 +140,7 @@
                                     Username:
                                     </span>
                                 </label>
-                                <input class="form-control" type:"text" name="Username" id="username" value="">
+                                <input class="form-control" type="text" name="Username" id="username" value="">
                             </div>
                             <div class="form-group">
                                 <label for="Name">
@@ -137,7 +148,7 @@
                                     Name:
                                     </span>
                                 </label>
-                                <input class="form-control" type:"text" name="Name" id="Name" value="">
+                                <input class="form-control" type="text" name="Name" id="Name" value="">
                                 <small class="text-muted">Optional</small>
                             </div>
                             <div class="form-group">
@@ -146,7 +157,7 @@
                                     Password:
                                     </span>
                                 </label>
-                                <input class="form-control" type:"password" name="Password" id="Password" value="">
+                                <input class="form-control" type="password" name="Password" id="Password" value="">
                             </div>
                             <div class="form-group">
                                 <label for="Title">
@@ -154,7 +165,7 @@
                                     Confirm Password:
                                     </span>
                                 </label>
-                                <input class="form-control" type:"password" name="ConfirmPassword" id="ConfirmPassword" value="">
+                                <input class="form-control" type="password" name="ConfirmPassword" id="ConfirmPassword" value="">
                             </div>
                             <div class="row">
                                 <div class="col-lg-6 mb-2">
