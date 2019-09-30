@@ -12,6 +12,7 @@
     <link rel="stylesheet" href="css/styles.css">
     <title>Blog Page</title>
 </head>
+
 <body>
     <!-- NAVBAR -->
     <div style="height: 10px; background: #27aae1;"></div>
@@ -55,10 +56,10 @@
     <!-- NAVBAR END -->
 
     <!--- HEADER -->
-    <div class="container">
+    <div class="container mt-3 mb-3">
         <div class="row">
             <!-- Main Area Start -->
-            <div class="col-sm-8" style="min-height:40px; background:rgb(250,250,250);">
+            <div class="col-sm-8" style="min-height:40px;">
                 <hr>
                 <h1>Complete Responsive CMS Art Blog</h1>
                 <h1 class="lead">PHP, HTML, Bootstrap, and MySQL</h1>
@@ -95,7 +96,7 @@
                     
                 
                 ?>
-                <div class="card text-white bg-secondary mb-3">
+                <div class="card mb-3">
                     <img src="uploads/<?php echo htmlentities($Image); ?>" style="max-height:450px; padding:10px" class="img-fluid card-img-top"/>
                     <div class="card-body">
                         <h4 class="card-title"><?php echo htmlentities($PostTitle); ?></h4>
@@ -156,6 +157,7 @@
     <div style="height: 10px; background: #27aae1;"></div>
 
     <!-- FOOTER END -->
+
 
 
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>

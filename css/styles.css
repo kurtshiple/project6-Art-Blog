@@ -1,3 +1,5 @@
+
+
 .FieldInfo{
     color: rgb(251, 174, 44);
     font-family: Bitter, Georgia, "Times New Roman",Times, serif;
@@ -18,4 +20,15 @@
     height: 30px;
     width: 30px;
 
+}
+
+.CommentBlock{
+    background-color:#F6F7F9;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    
+}
+
+div.card {
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  
 }

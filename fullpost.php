@@ -21,7 +21,7 @@
         // query to insert comment in DB when everything is fine.
         global $ConnectingDB;
         $sql = "INSERT INTO comments(datetime,name,email,comment,approvedby,status,post_id)";
-        $sql .= "VALUES(:dateTime,:name,:email,:comment,'pending','OFF',:postIdFromURL)";
+        $sql .= "VALUES(:dateTime,:name,:email,:comment,'pending','ON',:postIdFromURL)";
         $stmt = $ConnectingDB->prepare($sql);
         $stmt->bindValue(':dateTime',$DateTime);
         $stmt->bindvalue(':name',$Name);
@@ -102,13 +102,12 @@
         <div class="row">
        
             <!-- Main Area Start -->
-            <div class="col-sm-8" style="min-height:40px; background:rgb(250,250,250);">
+            <div class="col-sm-8" style="min-height:40px;">
                 <hr>
                 <?php
                     echo ErrorMessage();
                     echo SuccessMessage();
                 ?>
-                <hr>
                 <h1>Complete Responsive CMS Art Blog</h1>
                 <h1 class="lead">PHP, HTML, Bootstrap, and MySQL</h1>
                 <hr>
@@ -147,6 +146,7 @@
                 
                 ?>
                 <div class="card mb-3">
+                    
                     <img src="uploads/<?php echo htmlentities($Image); ?>" style="max-height:450px; padding:10px" class="img-fluid card-img-top"/>
                     <div class="card-body">
                         <h4 class="card-title"><?php echo htmlentities($PostTitle); ?></h4>
@@ -164,12 +164,11 @@
                 <hr>
                 
                 <!-- Comment Area Start -->
-                
                 <div>
                 <form class="" action="fullpost.php?id=<?php echo $SearchQueryParameter ?>" method="post">
                     <div class="card mb-3">
                         <div class="card-header" style="padding:20px;">
-                            <h5 class="FieldInfo"> Comments</h5>
+                            <h5 class="FieldInfo"> Add Comment</h5>
                         </div>
                         <div class="card-body">
                             <div class="form-group">
@@ -200,6 +199,45 @@
                     </div>
                 </form>
             </div>
+                <!-- Fetching existing comment Start -->
+                <div class="card mb-3">
+                    <div class="card-header" style="padding:20px">
+                    <span class="FieldInfo">Comment Section</span>
+                    </div>
+                    <br>
+                    <?php
+                    global $ConnectingDB;
+                    $sql = "SELECT * FROM comments 
+                    WHERE post_id='$SearchQueryParameter'
+                    AND status='ON'";
+                    $stmt = $ConnectingDB->query($sql);
+                    while ($DataRows = $stmt->fetch()) {
+                        $CommentDate = $DataRows['datetime'];
+                        $CommenterName = $DataRows['name'];
+                        $CommentContent = $DataRows['comment'];
+
+                    ?>
+                    <div style="padding:20px">
+                        <div class="media CommentBlock">
+                            <img class="d-block img-fluid ml-1 mt-1" src="images/user.ong.png" alt="" height="60" width="60">
+                            <div class="media-body ml-2">
+                                
+                                <h6 class="lead bold" style="color: blue;"><?php echo $CommenterName; ?></h6>
+                                <p class="small" style="color: blue;"><?php echo $CommentDate; ?></p>
+                                
+                                <p><?php echo $CommentContent; ?></p>
+                        
+                
+                            </div>
+                        </div>
+                    </div>
+                    <hr>
+                   
+
+                    <?php } ?>
+                    
+                </div>
+                <!-- Fetching Existing comment END -->
             <!-- Comment Area End -->
             <!-- Main Area End -->
             
@@ -207,7 +245,6 @@
             </div>
             <!-- Side Area Start -->
             <div class="col-sm-4" style="min-height:40px; background:green;">
-            
             
             </div>
             <!-- Side Area End -->
