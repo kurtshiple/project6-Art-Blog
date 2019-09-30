@@ -26,6 +26,9 @@
     }elseif($Password !== $ConfirmPassword){
         $_SESSION["ErrorMessage"]= "Password and Confirm Password Must Match";
         Redirect_to("admins.php");   
+    }elseif(CheckUserNameExistsOrNot($UserName)){
+        $_SESSION["ErrorMessage"]= "Username Exists. Try Another One!";
+        Redirect_to("admins.php");   
     }else{
         //Query to insert new admin in DB when everything is fine.
         global $ConnectingDB;
@@ -40,7 +43,7 @@
         $Execute=$stmt->execute();
 
     if($Execute){
-        $_SESSION["SuccessMessage"]="New Admin With The Name ".$Name." Added Successfully";
+        $_SESSION["SuccessMessage"]="New Admin With The Name '".$Name."' Added Successfully";
         Redirect_to("admins.php");
     }else {
         $_SESSION["ErrorMessage"]="Something went wrong. Try again!";

@@ -1,3 +1,6 @@
+<?php require_once("DB.php"); ?>
+
+
 <?php
 
 function Redirect_to($New_Location){
@@ -6,4 +9,17 @@ function Redirect_to($New_Location){
     exit;
 }
 
+function CheckUserNameExistsOrNot($UserName){
+    global $ConnectingDB;
+    $sql = "SELECT username FROM admins WHERE username=:userName";
+    $stmt = $ConnectingDB->prepare($sql);
+    $stmt->bindValue(':userName',$UserName);
+    $stmt->execute();
+    $Result=$stmt->rowcount();
+    if ($Result==1){
+        return true;
+    }else{
+        return false;
+    }
+}
 ?>
