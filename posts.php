@@ -100,93 +100,101 @@ Confirm_Login();
                     echo ErrorMessage();
                     echo SuccessMessage();
                 ?>
-                <table class="table table-striped table-hover">
-                    <thead class="thead-dark">
-                        <tr>
-                            <th>#</th>
-                            <th>Title</th>
-                            <th>Category</th>
-                            <th>Date & Time</th>
-                            <th>Author</th>
-                            <th>Banner</th>
-                            <th>Comments</th>
-                            <th>Edit</th>
-                            <th>Delete</th>
-                            <th>Live Preview</th>
-                        </tr>
-                    </thead>
-                    <?php 
-                    global $ConnectingDB;
-                    $Sr = 0;
-                    $sql = "SELECT * FROM posts";
-                    $stmt = $ConnectingDB->query($sql);
-                    while ($DataRows = $stmt->fetch()) {
-                        $Id = $DataRows["id"];
-                        $DateTime = $DataRows["datetime"];
-                        $PostTitle = $DataRows["title"];
-                        $Category = $DataRows["category"];
-                        $Admin = $DataRows["author"];
-                        $Image = $DataRows["image"];
-                        $PostText = $DataRows["post"];
-                        $Sr++;
-                    
-                    
-                    ?>
-                    <tbody>
-                    <tr>
-                        <td>
-                            <?php echo $Sr; ?> 
-                        </td>
-                        <td>
+                <div class="card bg-secondary text-light mb-3 mt-3">
+                    <div class="card-header">
+                        <h1>Existing Posts</h1>
+                    </div>
+<!--                    <div class="card-body bg-light">-->
+                        <table class="table table-striped table-hover">
+                            <thead class="thead-dark">
+                                <tr>
+                                    <th>#</th>
+                                    <th>Title</th>
+                                    <th>Category</th>
+                                    <th>Date & Time</th>
+                                    <th>Author</th>
+                                    <th>Image</th>
+                                    <th>Comments</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
                             <?php 
-                                if (strlen($PostTitle)>20){
-                                    $PostTitle = substr($PostTitle,0,17).'..';
-                                }
-                            echo $PostTitle;
+                            global $ConnectingDB;
+                            $Sr = 0;
+                            $sql = "SELECT * FROM posts";
+                            $stmt = $ConnectingDB->query($sql);
+                            while ($DataRows = $stmt->fetch()) {
+                                $Id = $DataRows["id"];
+                                $DateTime = $DataRows["datetime"];
+                                $PostTitle = $DataRows["title"];
+                                $Category = $DataRows["category"];
+                                $Admin = $DataRows["author"];
+                                $Image = $DataRows["image"];
+                                $PostText = $DataRows["post"];
+                                $Sr++;
+
+
                             ?>
-                        </td>
-                        <td>
-                            <?php
-                            echo $Category; 
-                            ?>
-                        </td>
-                        <td>
-                            <?php 
-                            if (strlen($DateTime)>20){
-                                    $DateTime = substr($DateTime,0,17).'..';
-                                }
-                            echo $DateTime; 
-                            ?>
-                        </td>
-                        <td>
-                            <?php
-                            if (strlen($Admin)>10){
-                                    $Admin = substr($Admin,0,10).'..';
-                                }
-                            echo $Admin; 
-                            ?>
-                        </td>
-                        <td>
-                            <img src="uploads/<?php echo $Image; ?>" width="70px;" height="70px;">
-                        </td>
-                        <td>
-                            Comments
-                        </td>
-                        <td style="height:10px; width:40px; margin:0;"> 
-                            <a href="editpost.php?id=<?php echo $Id ?>"><span class="btn btn-warning" style=" margin:0;">Edit</span></a>
-                            
-                        </td>
-                        <td style="height:10px; width:40px; margin:0;"> 
-                            <a href="deletepost.php?id=<?php echo $Id ?>"><span class="btn btn-danger" style=" margin:0;">Delete</span></a>
-                            
-                        </td>
-                        <td style="height:10px; width:40px; margin:0;">
-                            <a href="fullpost.php?id=<?php echo $Id; ?>" target="_blank"><span class="btn btn-primary">Live Preview</span></a>
-                        </td>
-                    </tr>
-                    </tbody>
-                    <?php } ?>
-                </table>
+                            <tbody class="text-light">
+                            <tr>
+                                <td>
+                                    <?php echo $Sr; ?> 
+                                </td>
+                                <td>
+                                    <?php 
+                                        if (strlen($PostTitle)>20){
+                                            $PostTitle = substr($PostTitle,0,17).'..';
+                                        }
+                                    echo $PostTitle;
+                                    ?>
+                                </td>
+                                <td>
+                                    <?php
+                                    echo $Category; 
+                                    ?>
+                                </td>
+                                <td>
+                                    <?php 
+                                    if (strlen($DateTime)>20){
+                                            $DateTime = substr($DateTime,0,17).'..';
+                                        }
+                                    echo $DateTime; 
+                                    ?>
+                                </td>
+                                <td>
+                                    <?php
+                                    if (strlen($Admin)>10){
+                                            $Admin = substr($Admin,0,10).'..';
+                                        }
+                                    echo $Admin; 
+                                    ?>
+                                </td>
+                                <td>
+                                    <img src="uploads/<?php echo $Image; ?>" width="70px;" height="70px;">
+                                </td>
+                                <td>
+                                    Comments
+                                </td>
+                                <td>
+                                    <table>
+                                        <tr>
+                                            <td><a href="editpost.php?id=<?php echo $Id ?>" class="btn btn-warning" style="width:100%">Edit</a></td>
+                                            <td><a href="deletepost.php?id=<?php echo $Id ?>" class="btn btn-danger" style="width:100%">Delete</a></td>
+                                        </tr>
+
+                                        <tr>
+                                            <td colspan="2"><a href="fullpost.php?id=<?php echo $Id; ?>" target="_blank" class="btn btn-primary" style="width:100%">Live Preview</a></td>
+                                        </tr>
+                                    </table>
+                                
+                                </td>
+                                
+                            </tr>
+                            </tbody>
+                            <?php } ?>
+                        </table>
+<!--                    </div>-->
+                </div>
             </div>
         </div>
         

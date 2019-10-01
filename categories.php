@@ -151,7 +151,51 @@ Confirm_Login();
                         </div>
                     </div>
                 </form>
-            
+                <div class="card bg-secondary text-light mb-3 mt-3">
+                    <div class="card-header">
+                        <h1>Existing Categories</h1>
+                     </div>
+                  
+                        <table class="table table-striped table-hover">
+                            <thead class="thead-dark">
+                                <tr>
+                                    <th>No. </th>
+                                    <th>Date & Time </th>
+                                    <th>Category Name</th>
+                                    <th>Creator Name </th>
+                                    <th>Action </th>
+                                </tr>
+                            </thead>
+
+                        <?php
+                        global $ConnectingDB;
+        //                $sql = "SELECT * FROM comments ORDER BY id desc";
+                        $sql = "SELECT * FROM category ORDER BY id desc";
+                        $Execute=$ConnectingDB->query($sql);
+                        $SrNo = 0;
+                        while ($DataRows=$Execute->fetch()){
+                            $CategoryId = $DataRows["id"];
+                            $CategoryDate = $DataRows["datetime"];
+                            $CategoryName = $DataRows["title"];
+                            $CreatorName = $DataRows["author"];
+                            $SrNo++;
+                        ?>
+                            <tbody class="text-light">
+                                <tr>
+                                    <td><?php echo htmlentities($SrNo); ?></td>
+                                    <td><?php echo htmlentities($CategoryDate); ?></td>
+                                    <td><?php echo htmlentities($CategoryName); ?></td>
+                                    <td><?php echo htmlentities($CreatorName); ?></td>
+                                    <td>
+                                        <a href="deletecategory.php?id=<?php echo $CategoryId; ?>" class="btn btn-danger" style="width:100%; height:100%;">Delete</a>
+                                    </td>
+
+                                </tr>
+                            </tbody>
+                            <?php } ?>
+                        </table> 
+                    </div>
+                
             </div> 
         </div>
     </section>

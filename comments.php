@@ -50,7 +50,7 @@ Confirm_Login(); ?>
                 </li>
             </ul>
             <ul class="navbar-nav ml-auto">
-                <li class="nav-item"><a href="Logout.php" class="nav-link text-danger"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
+                <li class="nav-item"><a href="logout.php" class="nav-link text-danger"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
             </ul>
             </div>
         </div>
@@ -76,7 +76,11 @@ Confirm_Login(); ?>
                 <?php echo ErrorMessage();
                       echo SuccessMessage();
                 ?>
-                <h2>All Comments</h2>
+                
+                <div class="card bg-secondary text-light mb-3 mt-3">
+                    <div class="card-header">
+                        <h1>Existing Comments</h1>
+                    </div>
                 <table class="table table-striped table-hover">
                     <thead class="thead-dark">
                         <tr>
@@ -106,7 +110,7 @@ Confirm_Login(); ?>
                     $CommentStatus = $DataRows["status"];
                     $SrNo++;
                 ?>
-                    <tbody>
+                    <tbody class="text-light">
                         <tr>
                             <td><?php echo htmlentities($SrNo); ?></td>
                             <td><?php echo htmlentities($DateTimeOfComment); ?></td>
@@ -132,6 +136,7 @@ Confirm_Login(); ?>
                     </tbody>
                     <?php } ?>
                 </table> 
+                </div>
             </div>
         </div>
     </section>
