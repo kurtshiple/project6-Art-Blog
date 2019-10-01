@@ -22,7 +22,7 @@ Confirm_Login(); ?>
     $CurrentTime=time();
     $DateTime=strftime("%B-%d-%Y %H:%M:%S",$CurrentTime);
         
-    if(empty($UserName)||empty($Password)||empty($ConfirmPassword)){
+    if(empty($UserName)||empty($Password)||empty($ConfirmPassword)||empty($Name)){
         $_SESSION["ErrorMessage"]= "All Fields Must Be Filled Out";
         Redirect_to("admins.php");       
     }elseif(strlen($Password)<4){
@@ -190,7 +190,53 @@ Confirm_Login(); ?>
                         </div>
                     </div>
                 </form>
-            
+                <div class="card bg-secondary text-light mb-3 mt-3">
+                    <div class="card-header">
+                        <h1>Existing Admins</h1>
+                     </div>
+                  
+                        <table class="table table-striped table-hover">
+                            <thead class="thead-dark">
+                                <tr>
+                                    <th>No. </th>
+                                    <th>Date & Time </th>
+                                    <th>Username</th>
+                                    <th>Admin Name </th>
+                                    <th>Added by </th>
+                                    <th>Action </th>
+                                </tr>
+                            </thead>
+
+                        <?php
+                        global $ConnectingDB;
+        //                $sql = "SELECT * FROM comments ORDER BY id desc";
+                        $sql = "SELECT * FROM admins ORDER BY id desc";
+                        $Execute=$ConnectingDB->query($sql);
+                        $SrNo = 0;
+                        while ($DataRows=$Execute->fetch()){
+                            $AdminId = $DataRows["id"];
+                            $DateTime = $DataRows["datetime"];
+                            $AdminUsername = $DataRows["username"];
+                            $AdminName = $DataRows["aname"];
+                            $AddedBy = $DataRows["addedby"];
+                            $SrNo++;
+                        ?>
+                            <tbody class="text-light">
+                                <tr>
+                                    <td><?php echo htmlentities($SrNo); ?></td>
+                                    <td><?php echo htmlentities($DateTime); ?></td>
+                                    <td><?php echo htmlentities($AdminUsername); ?></td>
+                                    <td><?php echo htmlentities($AdminName); ?></td>
+                                    <td><?php echo htmlentities($AddedBy); ?></td>
+                                    <td>
+                                        <a href="deleteadmin.php?id=<?php echo $AdminId; ?>" class="btn btn-danger" style="width:100%; height:100%;">Delete</a>
+                                    </td>
+
+                                </tr>
+                            </tbody>
+                            <?php } ?>
+                        </table> 
+                    </div>
             </div> 
         </div>
     </section>
