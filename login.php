@@ -2,6 +2,10 @@
 <?php require_once("includes/Functions.php"); ?>
 <?php require_once("includes/sessions.php"); ?>
 <?php 
+if(isset($_SESSION["UserId"])){
+    Redirect_to("dashboard.php");
+}
+
 if (isset($_POST["Submit"])){
     $UserName = $_POST["Username"];
     $Password = $_POST["Password"];
