@@ -104,7 +104,7 @@ Confirm_Login();
         <div class="container">
             <div class="row">
                 <div class="col-md-12">
-                <h1><i class="fas fa-edit" style="color:#27aae1;"></i> Manage Categories</h1>
+                <h1><i class="fas fa-th-large" style="color:#27aae1;"></i> Manage Categories</h1>
                 </div>
             </div>
         </div>
