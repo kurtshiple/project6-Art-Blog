@@ -11,7 +11,7 @@
     echo $Image;
     $Target = "uploads/";
     $PostText = $_POST["PostDescription"];
-    $Admin = "Kurt"; 
+    $Admin = $_SESSION["UserName"]; 
     date_default_timezone_set("America/New_York");
     $CurrentTime=time();
     $DateTime=strftime("%B-%d-%Y %H:%M:%S",$CurrentTime);

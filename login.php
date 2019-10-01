@@ -15,8 +15,8 @@ if (isset($_POST["Submit"])){
         $_SESSION["UserName"]=$Found_Account["username"];
         $_SESSION["AdminName"]=$Found_Account["aname"];
 
-        $_SESSION["SuccessMessage"]="Welcome ".$_SESSION["AdminName"];
-        Redirect_to("login.php");
+        $_SESSION["SuccessMessage"]="Welcome ".$_SESSION["UserName"];
+        Redirect_to("dashboard .php");
     }else{
         $_SESSION["ErrorMessage"]="Incorrect Username/Password";
         Redirect_to("login.php");
