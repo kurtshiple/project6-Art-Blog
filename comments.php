@@ -73,15 +73,19 @@ Confirm_Login(); ?>
     <section class="container py-2 mb-4">
         <div class="row" style="min-height:30px;">
             <div class="col-lg-12" style="min-height:400px;">
-                
-                <h2>Un-Approved Comments</h2>
+                <?php echo ErrorMessage();
+                      echo SuccessMessage();
+                ?>
+                <h2>All Comments</h2>
                 <table class="table table-striped table-hover">
                     <thead class="thead-dark">
                         <tr>
                             <th>No. </th>
                             <th>Date & Time </th>
-                            <th>Name </th>
+                            <th>Post Title </th>
+                            <th>Commenter Name </th>
                             <th>Comment </th>
+                            <th>Status </th>
                             <th>Approve </th>
                             <th>Delete </th>
                             <th>Details </th>
@@ -90,25 +94,30 @@ Confirm_Login(); ?>
                 
                 <?php
                 global $ConnectingDB;
-                $sql = "SELECT * FROM comments WHERE status='ON' ORDER BY id desc";
+//                $sql = "SELECT * FROM comments ORDER BY id desc";
+                $sql = "SELECT posts.id, posts.title, comments.id, comments.datetime, comments.name, comments.comment, comments.post_id, comments.status FROM posts INNER JOIN comments ON posts.id = comments.post_id ORDER BY comments.id DESC";
                 $Execute=$ConnectingDB->query($sql);
                 $SrNo = 0;
                 while ($DataRows=$Execute->fetch()){
+                    $PostTitle = $DataRows["title"];
                     $CommentId = $DataRows["id"];
                     $DateTimeOfComment = $DataRows["datetime"];
                     $CommenterName = $DataRows["name"];
                     $CommentContent = $DataRows["comment"];
                     $CommentPostId = $DataRows["post_id"];
+                    $CommentStatus = $DataRows["status"];
                     $SrNo++;
                 ?>
                     <tbody>
                         <tr>
                             <td><?php echo htmlentities($SrNo); ?></td>
                             <td><?php echo htmlentities($DateTimeOfComment); ?></td>
+                            <td><?php echo htmlentities($PostTitle); ?></td>
                             <td><?php echo htmlentities($CommenterName); ?></td>
                             <td><?php echo htmlentities($CommentContent); ?></td>
-                            <td><a href="approvecomment.php?id=<?php echo $CommentId; ?>" class="btn btn-success">Approve</a></td>
-                            <td><a href="deletecomment.php?id=<?php echo $CommentId; ?>" class="btn btn-danger">Delete</a></td>
+                            <td><?php echo htmlentities($CommentStatus); ?></td>
+                            <td><a href="approvecomments.php?id=<?php echo $CommentId; ?>" class="btn btn-success">Approve</a></td>
+                            <td><a href="deletecomments.php?id=<?php echo $CommentId; ?>" class="btn btn-danger">Delete</a></td>
                             <td><a class="btn btn-primary" href="fullpost.php?id=<?php echo $CommentPostId; ?>">Live Preview</a></td>
                         </tr>
                     </tbody>
