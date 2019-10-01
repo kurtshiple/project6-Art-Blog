@@ -1,3 +1,29 @@
+<?php require_once("includes/DB.php"); ?>
+<?php require_once("includes/Functions.php"); ?>
+<?php require_once("includes/sessions.php"); ?>
+<?php 
+if (isset($_POST["Submit"])){
+    $UserName = $_POST["Username"];
+    $Password = $_POST["Password"];
+    if (empty($UserName)||empty($Password)){
+        $_SESSION["ErrorMessage"] = "All fields must be filled out";
+        Redirect_to(login.php);
+    }else{
+    $Found_Account=Login_Attempt($UserName,$Password);
+    if ($Found_Account){
+        $_SESSION["UserId"]=$Found_Account["id"];
+        $_SESSION["UserName"]=$Found_Account["username"];
+        $_SESSION["AdminName"]=$Found_Account["aname"];
+
+        $_SESSION["SuccessMessage"]="Welcome ".$_SESSION["AdminName"];
+        Redirect_to("login.php");
+    }else{
+        $_SESSION["ErrorMessage"]="Incorrect Username/Password";
+        Redirect_to("login.php");
+    }
+    }
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -7,7 +33,7 @@
     <script src="https://kit.fontawesome.com/baf56a4085.js" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <link rel="stylesheet" href="css/styles.css">
-    <title>Blog Page</title>
+    <title>Login</title>
 </head>
 <body>
     <!-- NAVBAR -->
@@ -43,6 +69,9 @@
         <div class="row">
             <div class="offset-sm-3 col-sm-6" style="min-height:622px;">
                 <br><br><br><br>
+                <?php echo ErrorMessage();
+                      echo SuccessMessage();
+                ?>
                 <div class="card bg-secondary text-light">
                     <div class="card-header">
                         <h4>Welcome Back!</h4>
