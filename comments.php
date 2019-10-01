@@ -86,9 +86,7 @@ Confirm_Login(); ?>
                             <th>Commenter Name </th>
                             <th>Comment </th>
                             <th>Status </th>
-                            <th>Approve </th>
-                            <th>Delete </th>
-                            <th>Details </th>
+                            <th>Actions </th>
                         </tr>
                     </thead>
                 
@@ -116,13 +114,24 @@ Confirm_Login(); ?>
                             <td><?php echo htmlentities($CommenterName); ?></td>
                             <td><?php echo htmlentities($CommentContent); ?></td>
                             <td><?php echo htmlentities($CommentStatus); ?></td>
-                            <td><a href="approvecomments.php?id=<?php echo $CommentId; ?>" class="btn btn-success">Approve</a></td>
-                            <td><a href="deletecomments.php?id=<?php echo $CommentId; ?>" class="btn btn-danger">Delete</a></td>
-                            <td><a class="btn btn-primary" href="fullpost.php?id=<?php echo $CommentPostId; ?>">Live Preview</a></td>
+                            <td>
+                                <table>
+                                    <tr>
+                                        <td><a href="approvecomments.php?id=<?php echo $CommentId; ?>" class="btn btn-success" style="width:100%">Approve</a></td>
+                                        <td><a href="disapprovecomments.php?id=<?php echo $CommentId; ?>" class="btn btn-warning" style="width:100%">Disapprove</a></td>
+                                    </tr>
+                                    
+                                    <tr>
+                                        <td><a href="deletecomments.php?id=<?php echo $CommentId; ?>" class="btn btn-danger" style="width:100%; height:100%;">Delete</a></td>
+                                        <td><a class="btn btn-primary" href="fullpost.php?id=<?php echo $CommentPostId; ?>" style="width:100%">Preview</a></td>
+                                    </tr>
+                                </table>
+                            </td>
+                            
                         </tr>
                     </tbody>
                     <?php } ?>
-                </table>                
+                </table> 
             </div>
         </div>
     </section>
