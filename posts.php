@@ -1,6 +1,7 @@
 <?php require_once("includes/DB.php"); ?>
 <?php require_once("includes/Functions.php"); ?>
 <?php require_once("includes/sessions.php"); ?>
+<?php Confirm_Login(); ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -46,7 +47,7 @@
                 </li>
             </ul>
             <ul class="navbar-nav ml-auto">
-                <li class="nav-item"><a href="Logout.php" class="nav-link text-danger"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
+                <li class="nav-item"><a href="logout.php" class="nav-link text-danger"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
             </ul>
             </div>
         </div>
