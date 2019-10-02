@@ -92,7 +92,7 @@
                     $stmt = $ConnectingDB->prepare($sql);
                     $stmt->bindValue(':search','%'.$Search.'%');
                     $stmt->execute();
-                    
+                  //Query When pagination is active i.e. Blog.php?pages=1  
                 }elseif(isset($_GET["page"])){
                     $Page = $_GET["page"];
                     if($Page==0||$Page<1){
@@ -104,7 +104,17 @@
                     $sql = "SELECT * FROM posts ORDER BY id desc LIMIT $ShowPostFrom,5";
                     $stmt=$ConnectingDB->query($sql);
                     
-                }else{
+                }
+                // Query When Category is active in URL Tab
+                elseif(isset($_GET["category"])){
+                    $Category = $_GET["category"];
+                    $sql = "SELECT * FROM posts WHERE category=:categoryName ORDER BY id desc";   
+                    $stmt = $ConnectingDB->prepare($sql);
+                    $stmt->bindValue(':categoryName',$Category);
+                    $stmt->execute();
+                }
+                // The default SQL query
+                else{
                     $sql = "SELECT * FROM posts ORDER BY id desc";
                     $stmt = $ConnectingDB->query($sql);
                 }
