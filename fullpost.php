@@ -66,13 +66,13 @@
             <div class="collapse navbar-collapse" id="navbarcollapseCMS">
             <ul class="navbar-nav mr-auto">
                 <li class="nav-item">
-                    <a href="blog.php" class="nav-link"><i class="fas fa-home"></i> Home</a>
+                    <a href="blog.php?page=1" class="nav-link"><i class="fas fa-home"></i> Home</a>
                 </li>
                 <li class="nav-item">
                     <a href="#" class="nav-link"><i class="fas fa-info-circle"></i> About Us</a>
                 </li>
                 <li class="nav-item">
-                    <a href="blog.php" class="nav-link"><i class="fab fa-elementor"></i> Blog</a>
+                    <a href="blog.php?page=1" class="nav-link"><i class="fab fa-elementor"></i> Blog</a>
                 </li>
                 <li class="nav-item">
                     <a href="comments.php" class="nav-link"><i class="fas fa-at"></i> Contact Us</a>

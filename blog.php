@@ -25,13 +25,13 @@
             <div class="collapse navbar-collapse" id="navbarcollapseCMS">
             <ul class="navbar-nav mr-auto">
                 <li class="nav-item">
-                    <a href="blog.php" class="nav-link"><i class="fas fa-home"></i> Home</a>
+                    <a href="blog.php?page=1" class="nav-link"><i class="fas fa-home"></i> Home</a>
                 </li>
                 <li class="nav-item">
                     <a href="#" class="nav-link"><i class="fas fa-info-circle"></i> About Us</a>
                 </li>
                 <li class="nav-item">
-                    <a href="blog.php" class="nav-link"><i class="fab fa-elementor"></i> Blog</a>
+                    <a href="blog.php?page=1" class="nav-link"><i class="fab fa-elementor"></i> Blog</a>
                 </li>
                 <li class="nav-item">
                     <a href="comments.php" class="nav-link"><i class="fas fa-at"></i> Contact Us</a>
@@ -136,6 +136,14 @@
                 <!-- Pagination -->
                 <nav>
                     <ul class="pagination pagination-lg">
+                        <!-- Creating back button -->
+                        
+                        <?php if (isset($Page)) { 
+                        if ($Page>1){?>
+                            <li class="page-item">
+                                <a href="blog.php?page=<?php echo $Page-1; ?>" class="page-link">&laquo;</a>
+                            </li>
+                        <?php } } ?>
                         <?php 
                         global $ConnectingDB;
                         $sql = "SELECT COUNT(*) FROM posts";
@@ -159,6 +167,14 @@
                                     </li>
                            <?php }    
                             } }  ?>
+                        <!-- Creating forward button -->
+                        
+                        <?php if (isset($Page)) { 
+                        if ($Page+1<=$PostPagination){?>
+                            <li class="page-item">
+                                <a href="blog.php?page=<?php echo $Page+1; ?>" class="page-link">&raquo;</a>
+                            </li>
+                        <?php } } ?>
                     </ul>
                 </nav>
                 

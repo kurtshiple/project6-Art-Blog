@@ -101,7 +101,7 @@ Confirm_Login(); ?>
                     <a href="comments.php" class="nav-link"><i class="fas fa-comments"></i> Comments</a>
                 </li>
                 <li class="nav-item">
-                    <a href="blog.php" class="nav-link"><i class="fab fa-elementor"></i> Live Blog</a>
+                    <a href="blog.php?page=1" class="nav-link"><i class="fab fa-elementor"></i> Live Blog</a>
                 </li>
             </ul>
             <ul class="navbar-nav ml-auto">
