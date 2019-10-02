@@ -86,7 +86,7 @@
                     if($Page==0||$Page<1){
                         $ShowPostFrom=0;
                     }else{
-                        $ShowPostFrom=($Page*4)-4;  
+                        $ShowPostFrom=($Page*5)-5;  
                     }
                     
                     $sql = "SELECT * FROM posts ORDER BY id desc LIMIT $ShowPostFrom,5";
@@ -145,13 +145,20 @@
                        
                         $PostPagination=$TotalPosts/5;
                         $PostPagination=ceil($PostPagination);
-                        
+                        //echo post paginations
                         for ($i=1;$i <= $PostPagination; $i++){
-                        ?>
-                        <li class="page-item active">
-                            <a href="blog.php?page=<?php echo $i; ?>" class="page-link"><?php echo $i; ?></a>
-                        </li>
-                        <?php } ?>
+                            if(isset($Page)){
+                                if($i==$Page){  ?>
+                            <li class="page-item active">
+                                <a href="blog.php?page=<?php echo $i; ?>" class="page-link"><?php echo $i; ?></a>
+                            </li>
+                        <?php 
+                            }else {
+                            ?>     <li class="page-item">
+                                    <a href="blog.php?page=<?php echo $i; ?>" class="page-link"><?php echo $i; ?></a>
+                                    </li>
+                           <?php }    
+                            } }  ?>
                     </ul>
                 </nav>
                 
