@@ -6,53 +6,61 @@ $_SESSION["TrackingURL"]=$_SERVER["PHP_SELF"];
 
 Confirm_Login(); ?>
 
-<?php if(isset($_POST["Submit"])){
-    
-    $UserName = $_POST["Username"];
-    
-    $Name = $_POST["Name"];
 
+<?php 
+// Fetch the existing Admin Data Start
+$AdminId = $_SESSION["UserId"];
+global $ConnectingDB;
+$sql = "SELECT * FROM admins WHERE id='$AdminId'";
+$stmt = $ConnectingDB->query($sql);
+while ($DataRows = $stmt->fetch()){
+    $ExistingName = $DataRows['aname'];
+}
+// Fetch the existing Admin Data End
+
+if(isset($_POST["Submit"])){
     
-    $Password = $_POST["Password"];
-    
-    $ConfirmPassword = $_POST["ConfirmPassword"];
-    
+    $PostTitle = $_POST["PostTitle"];
+    $Category = $_POST["Category"];
+    $Image = $_FILES["Image"]["name"];
+    echo $Image;
+    $Target = "uploads/";
+    $PostText = $_POST["PostDescription"];
     $Admin = $_SESSION["UserName"]; 
     date_default_timezone_set("America/New_York");
     $CurrentTime=time();
     $DateTime=strftime("%B-%d-%Y %H:%M:%S",$CurrentTime);
         
-    if(empty($UserName)||empty($Password)||empty($ConfirmPassword)||empty($Name)){
-        $_SESSION["ErrorMessage"]= "All Fields Must Be Filled Out";
-        Redirect_to("admins.php");       
-    }elseif(strlen($Password)<4){
-        $_SESSION["ErrorMessage"]= "Password Must Be Greater Than 3 Characters";
-        Redirect_to("admins.php");   
-    }elseif($Password !== $ConfirmPassword){
-        $_SESSION["ErrorMessage"]= "Password and Confirm Password Must Match";
-        Redirect_to("admins.php");   
-    }elseif(CheckUserNameExistsOrNot($UserName)){
-        $_SESSION["ErrorMessage"]= "Username Exists. Try Another One!";
-        Redirect_to("admins.php");   
+    if(empty($PostTitle)){
+        $_SESSION["ErrorMessage"]= "Title Can't Be Empty";
+        Redirect_to("addnewpost.php");       
+    }elseif(strlen($PostTitle)<3){
+        $_SESSION["ErrorMessage"]= "Post Title Must Be Greater Than 2 Characters";
+        Redirect_to("addnewpost.php");   
+    }elseif(strlen($PostText)>9999){
+        $_SESSION["ErrorMessage"]= "Post Description Must Be Less Than 10,000 Characters";
+        Redirect_to("addnewpost.php");   
     }else{
-        //Query to insert new admin in DB when everything is fine.
+        //query to insert post in DB when everything is fine
         global $ConnectingDB;
-        $sql = "INSERT INTO admins(datetime,username,password,aname,addedby)";
-        $sql .= "VALUES(:dateTime,:userName,:password,:aName,:adminName)";
+        $sql = "INSERT INTO posts(datetime,title,category,author,image,post)";
+        $sql .= "VALUES(:dateTime,:postTitle,:categoryName,:adminName,:imageName,:postDescription)";
         $stmt = $ConnectingDB->prepare($sql);
         $stmt->bindValue(':dateTime',$DateTime);
-        $stmt->bindValue(':userName',$UserName);
-        $stmt->bindvalue(':password',$Password);
-        $stmt->bindValue(':aName',$Name);
-        $stmt->bindValue(':adminName',$Admin);
+        $stmt->bindValue(':postTitle',$PostTitle);
+        $stmt->bindValue(':categoryName',$Category);
+        $stmt->bindvalue(':adminName',$Admin);
+        $stmt->bindValue(':imageName',$Image);
+        $stmt->bindValue(':postDescription',$PostText);
         $Execute=$stmt->execute();
+        move_uploaded_file ($_FILES["Image"]["tmp_name"], $Target.$Image);
 
     if($Execute){
-        $_SESSION["SuccessMessage"]="New Admin With The Name '".$Name."' Added Successfully";
-        Redirect_to("admins.php");
+        $_SESSION["SuccessMessage"]="Post with id : ".$ConnectingDB->lastInsertId()." Added Successfully";
+        Redirect_to("addnewpost.php");
     }else {
-        $_SESSION["ErrorMessage"]="Something went wrong. Try again!";
-        Redirect_to("admins.php");
+        $_SESSION["ErrorMessage"]="Something went wrong. The image size may be too large. Try again!";
+        Redirect_to("addnewpost.php");
     }
   
   }
@@ -69,7 +77,7 @@ Confirm_Login(); ?>
     <script src="https://kit.fontawesome.com/baf56a4085.js" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <link rel="stylesheet" href="css/styles.css">
-    <title>Admin Page</title>
+    <title>My Profile</title>
 </head>
 <body>
     <!-- NAVBAR -->
@@ -118,7 +126,7 @@ Confirm_Login(); ?>
         <div class="container">
             <div class="row">
                 <div class="col-md-12">
-                <h1><i class="fas fa-users-cog" style="color:#27aae1;"></i> Manage Admins</h1>
+                <h1><i class="fas fa-user mr-2" style="color:#27aae1;"></i> My Profile</h1>
                 </div>
             </div>
         </div>
@@ -129,50 +137,83 @@ Confirm_Login(); ?>
     
     <section class="container py-2 mb-4">
         <div class="row">
-            <div class="offset-lg-1 col-lg-10" style="min-height: 450px;">
+            <!-- Left Area -->
+            <div class="col-md-3">
+                <div class="card">
+                    <div class="card-header bg-dark text-light">
+                        <h3><?php echo $ExistingName ?></h3>
+                    </div>
+                    <div class="card-body">
+                        <img src="images/user.ong.png" class="block img-fluid mb-3" alt="">
+                        <div class="">
+                            Tcuwcwijbiwbcwribwribwh
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Left Area End -->
+            <div class="col-lg-9" style="min-height: 450px;">
                 <?php echo ErrorMessage();
                       echo SuccessMessage();
                 ?>
                 
-                <form class="" action="admins.php" method="post">
-                    <div class="card bg-secondary text-light mb-3 mt-3">
-                        <div class="card-header">
-                            <h1>
-                            Add New Admin
-                            </h1>
-                        </div>
+                <form class="" action="addnewpost.php" method="post" enctype="multipart/form-data">
+                    <div class="card bg-secondary text-light mb-3 mt-3" style="height: auto;">
                         <div class="card-body bg-dark">
-                            <div class="form-group">
-                                <label for="username">
-                                    <span class="FieldInfo">
-                                    Username:
-                                    </span>
-                                </label>
-                                <input class="form-control" type="text" name="Username" id="username" value="">
-                            </div>
-                            <div class="form-group">
-                                <label for="Name">
-                                    <span class="FieldInfo">
-                                    Name:
-                                    </span>
-                                </label>
-                                <input class="form-control" type="text" name="Name" id="Name" value="">
-                            </div>
-                            <div class="form-group">
-                                <label for="Password">
-                                    <span class="FieldInfo">
-                                    Password:
-                                    </span>
-                                </label>
-                                <input class="form-control" type="password" name="Password" id="Password" value="">
-                            </div>
                             <div class="form-group">
                                 <label for="Title">
                                     <span class="FieldInfo">
-                                    Confirm Password:
+                                    Post Title:
                                     </span>
                                 </label>
-                                <input class="form-control" type="password" name="ConfirmPassword" id="ConfirmPassword" value="">
+                                <input class="form-control" type:"text" name="PostTitle" id="title" placeholder="Type title here" value="">
+                            </div>
+                            <hr>
+                            <div class="form-group">
+                                <label for="CategoryTitle">
+                                    <span class="FieldInfo">
+                                    Choose Category:
+                                    </span>
+                                </label>
+                                <select class="form-control" id="CategoryTitle" name="Category">     
+                                    <?php
+                                    //Fetching all the categories from the category table
+                                    global $ConnectingDB;
+                                    $sql = "SELECT * FROM category";
+                                    $stmt = $ConnectingDB->query($sql);
+                                    while ($DateRows = $stmt->fetch()) {
+                                        $Id = $DateRows["id"];
+                                        $CategoryName = $DateRows["title"];
+                                
+                                    ?>
+                                    <option> <?php echo $CategoryName; ?></option>
+                                <?php } ?>
+                                </select>
+                            </div>
+                            <hr>
+                            <div class="form-group mb-1">
+                                <label for="CategoryTitle">
+                                    <span class="FieldInfo">
+                                    Choose Cover Image:
+                                    </span>
+                                </label>
+                                <div class="custom-file">
+                                    <input class="custom-file-input" type="File" accept="image/*" onchange="preview_image(event)" name="Image" id="imageSelect" value="" />
+                                    <label for="imageSelect" class="custom-file-label">Select Image</label>
+                                    
+                                </div>
+                                <hr>
+                                <div id="wrapper">
+                                    <img id="output_image"/>
+                                </div>
+                                <hr>
+                            <div class="form-group">
+                               <label for="Post">
+                                    <span class="FieldInfo">
+                                    Post:
+                                    </span>
+                                </label>
+                                <textarea class="form-control" id="Post" name="PostDescription" rows="8" cols="80"></textarea>
                             </div>
                             <div class="row">
                                 <div class="col-lg-6 mb-2">
@@ -188,54 +229,11 @@ Confirm_Login(); ?>
                             </div>
                         </div>
                     </div>
-                </form>
-                <div class="card bg-secondary text-light mb-3 mt-3">
-                    <div class="card-header">
-                        <h1>Existing Admins</h1>
-                     </div>
-                  
-                        <table class="table table-striped table-hover">
-                            <thead class="thead-dark">
-                                <tr>
-                                    <th>No. </th>
-                                    <th>Date & Time </th>
-                                    <th>Username</th>
-                                    <th>Admin Name </th>
-                                    <th>Added by </th>
-                                    <th>Action </th>
-                                </tr>
-                            </thead>
-
-                        <?php
-                        global $ConnectingDB;
-        //                $sql = "SELECT * FROM comments ORDER BY id desc";
-                        $sql = "SELECT * FROM admins ORDER BY id desc";
-                        $Execute=$ConnectingDB->query($sql);
-                        $SrNo = 0;
-                        while ($DataRows=$Execute->fetch()){
-                            $AdminId = $DataRows["id"];
-                            $DateTime = $DataRows["datetime"];
-                            $AdminUsername = $DataRows["username"];
-                            $AdminName = $DataRows["aname"];
-                            $AddedBy = $DataRows["addedby"];
-                            $SrNo++;
-                        ?>
-                            <tbody class="text-light">
-                                <tr>
-                                    <td><?php echo htmlentities($SrNo); ?></td>
-                                    <td><?php echo htmlentities($DateTime); ?></td>
-                                    <td><?php echo htmlentities($AdminUsername); ?></td>
-                                    <td><?php echo htmlentities($AdminName); ?></td>
-                                    <td><?php echo htmlentities($AddedBy); ?></td>
-                                    <td>
-                                        <a href="deleteadmin.php?id=<?php echo $AdminId; ?>" class="btn btn-danger" style="width:100%; height:100%;">Delete</a>
-                                    </td>
-
-                                </tr>
-                            </tbody>
-                            <?php } ?>
-                        </table> 
+                        
                     </div>
+    
+                </form>
+            
             </div> 
         </div>
     </section>
@@ -271,5 +269,17 @@ Confirm_Login(); ?>
     <script>
         $('#year').text(new Date().getFullYear());
     </script>
+    <script type='text/javascript'>
+        function preview_image(event) 
+        {
+         var reader = new FileReader();
+         reader.onload = function()
+         {
+          var output = document.getElementById('output_image');
+          output.src = reader.result;
+         }
+         reader.readAsDataURL(event.target.files[0]);
+        }
+</script>
 </body>
 </html>
