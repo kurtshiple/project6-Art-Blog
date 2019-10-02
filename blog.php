@@ -11,6 +11,18 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <link rel="stylesheet" href="css/styles.css">
     <title>Blog Page</title>
+    <style media="screen">
+    .heading{
+    font-family: Bitter,Georgia,"Times New Roman",Times, serif;
+    font-weight: bold;
+    color: #005E90;
+        }
+
+    .heading:hover{
+    color: #0090DB;
+        }
+    
+    </style>
 </head>
 
 <body>
@@ -169,7 +181,7 @@
                             } }  ?>
                         <!-- Creating forward button -->
                         
-                        <?php if (isset($Page)) { 
+                        <?php if (isset($Page)&&!empty($Page)) { 
                         if ($Page+1<=$PostPagination){?>
                             <li class="page-item">
                                 <a href="blog.php?page=<?php echo $Page+1; ?>" class="page-link">&raquo;</a>
@@ -186,9 +198,54 @@
             
             
             <!-- Side Area Start -->
-            <div class="col-sm-4" style="min-height:40px; background:green;">
-            
-            
+            <div class="col-sm-4">
+                <div class="card mt-4">
+                    <div class="card-body">
+                        <img src="images/Adolph_Tidemand_-_Low_Church_Devotion_-_Google_Art_Project.jpg" class="d-block img-fluid mb-3" alt="">
+                        <div class="text-center">
+                            The passage experienced a surge in popularity during the 1960s when Letraset used it on their dry-transfer sheets, and again during the 90s as desktop publishers bundled the text with their software. Today it's seen all around the web; on templates, websites, and stock designs. Use our generator to get your own, or read on for the authoritative history of lorem ipsum.
+
+
+                        </div>
+                    </div>
+                </div>
+                <br>
+                <div class="card">
+                    <div class="card-header bg-dark text-light">
+                        <h2 class="lead">Sign Up!</h2>
+                    </div>
+                    <div class="card-body">
+                        <button type="button" class="btn btn-success btn-block text-center text-white mb-4" name="button">Join the Forum</button>
+                        <button type="button" class="btn btn-danger btn-block text-center text-white mb-4" name="button">Login</button>
+                        <div class="input-group mb-3">
+                            <input type="text" class="form-control" name="" placeholder="Enter your email" value="">
+                            <div class="input-group-append">
+                                <button type="button" class="btn btn-primary btn-sm text-center text-white" name="button">Subscribe Now</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <br>
+                <div class="card">
+                    <div class="card-header bg-primary text-light">
+                        <h2 class="lead">Categories</h2>
+                        </div>
+                        <div class="card-body">
+                            <?php
+                            global $ConnectingDB;
+                            $sql = "SELECT * FROM category ORDER BY id desc";
+                            $stmt = $ConnectingDB->query($sql);
+                            while ($DataRows = $stmt->fetch()) {
+                                $CategoryId = $DataRows["id"];
+                                $CategoryName = $DataRows["title"];
+                                ?>
+                            
+                            <a href="blog.php?category=<?php echo $CategoryName; ?>"><span class="heading"><?php echo $CategoryName; ?></span></a><br>
+                            
+                            <?php } ?>
+                        
+                    </div>
+                </div>
             </div>
             <!-- Side Area End -->
         </div>
