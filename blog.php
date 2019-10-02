@@ -130,7 +130,7 @@
                 
                 ?>
                 <div class="card mb-3">
-                    <img src="uploads/<?php echo htmlentities($Image); ?>" style="max-height:450px; padding:10px" class="img-fluid card-img-top"/>
+                    <img src="uploads/<?php echo htmlentities($Image); ?>" style="min-height:450px; padding:10px" class="img-fluid card-img-top"/>
                     <div class="card-body">
                         <h4 class="card-title"><?php echo htmlentities($PostTitle); ?></h4>
                         <span class="badge badge-dark">Category: <?php echo htmlentities($Category); ?></span> & Written By <?php echo htmlentities($Admin); ?> On <?php echo htmlentities($DateTime); ?>
@@ -254,6 +254,37 @@
                             
                             <?php } ?>
                         
+                    </div>
+                </div>
+                <br>
+                <div class="card">
+                    <div class="card-header bg-info text-white">
+                        <h2 class="lead"> Recent Posts</h2>
+                    </div>
+                    <div class="card-body">
+                        <?php 
+                        global $ConnectingDB;
+                        $sql = "SELECT * FROM posts ORDER BY id desc LIMIT 0,5";
+                        $stmt= $ConnectingDB->query($sql);
+                        while ($DataRows=$stmt->fetch()) {
+                            $Id = $DataRows['id'];
+                            $Title = $DataRows['title'];
+                            $DateTime = $DataRows['datetime'];
+                            $Image = $DataRows['image'];
+                        
+                        ?>
+                        <div class="media">
+                            
+                            <img src="uploads/<?php echo htmlentities($Image); ?>" class="d-block img-fluid align-self-start" width="50%" height="100px" alt="">
+                            <div class="media-body ml-2">
+                                <a href="fullpost.php?id=<?php echo htmlentities($Id); ?>" target="_blank"><h6 class="lead"><?php echo htmlentities($Title); ?></h6></a>
+                                <p class="small"><?php echo htmlentities($DateTime); ?></p>
+                            </div>
+                            
+                        </div>
+                        
+                        <hr>
+                        <?php } ?>
                     </div>
                 </div>
             </div>
