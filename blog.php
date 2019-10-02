@@ -81,6 +81,17 @@
                     $stmt->bindValue(':search','%'.$Search.'%');
                     $stmt->execute();
                     
+                }elseif(isset($_GET["page"])){
+                    $Page = $_GET["page"];
+                    if($Page==0||$Page<1){
+                        $ShowPostFrom=0;
+                    }else{
+                        $ShowPostFrom=($Page*4)-4;  
+                    }
+                    
+                    $sql = "SELECT * FROM posts ORDER BY id desc LIMIT $ShowPostFrom,5";
+                    $stmt=$ConnectingDB->query($sql);
+                    
                 }else{
                     $sql = "SELECT * FROM posts ORDER BY id desc";
                     $stmt = $ConnectingDB->query($sql);
@@ -122,6 +133,29 @@
                 </div>
                 <hr>
                 <?php } ?>
+                <!-- Pagination -->
+                <nav>
+                    <ul class="pagination pagination-lg">
+                        <?php 
+                        global $ConnectingDB;
+                        $sql = "SELECT COUNT(*) FROM posts";
+                        $stmt = $ConnectingDB->query($sql);
+                        $RowPagination=$stmt->fetch();
+                        $TotalPosts=array_shift($RowPagination);
+                       
+                        $PostPagination=$TotalPosts/5;
+                        $PostPagination=ceil($PostPagination);
+                        
+                        for ($i=1;$i <= $PostPagination; $i++){
+                        ?>
+                        <li class="page-item active">
+                            <a href="blog.php?page=<?php echo $i; ?>" class="page-link"><?php echo $i; ?></a>
+                        </li>
+                        <?php } ?>
+                    </ul>
+                </nav>
+                
+                <!-- Pagination End -->
                 <hr>
             
             </div>
