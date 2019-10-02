@@ -173,7 +173,16 @@ Confirm_Login();
                                     <img src="uploads/<?php echo $Image; ?>" width="70px;" height="70px;">
                                 </td>
                                 <td>
-                                    Comments
+                                    <span class="badge badge-success" style="width:100%">
+                                        <?php 
+                                        ApproveCommentsAccordingToPost($Id);
+                                        ?>
+                                    </span>
+                                    <span class="badge badge-danger" style="width:100%;">
+                                        <?php 
+                                        DisapproveCommentsAccordingToPost($Id);
+                                        ?>
+                                    </span>
                                 </td>
                                 <td>
                                     <table>

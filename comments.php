@@ -127,7 +127,7 @@ Confirm_Login(); ?>
                                     
                                     <tr>
                                         <td><a href="deletecomments.php?id=<?php echo $CommentId; ?>" class="btn btn-danger" style="width:100%; height:100%;">Delete</a></td>
-                                        <td><a class="btn btn-primary" href="fullpost.php?id=<?php echo $CommentPostId; ?>" style="width:100%">Preview</a></td>
+                                        <td><a target="_blank" class="btn btn-primary" href="fullpost.php?id=<?php echo $CommentPostId; ?>" style="width:100%">Preview</a></td>
                                     </tr>
                                 </table>
                             </td>

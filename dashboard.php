@@ -149,7 +149,10 @@ Confirm_Login();
             <!-- Left Side Area End -->
             <!-- Right Side Area Start -->
             <div class="col-lg-10">
-                <h1>Top Posts</h1>
+                <div class="card bg-secondary text-light mb-3">
+                    <div class="card-header">
+                        <h1>Top Posts</h1>
+                    </div>
                 <table class="table table-striped table-hover">
                     <thead class="thead-dark">
                         <tr>
@@ -174,17 +177,25 @@ Confirm_Login();
                         $SrNo++;
                     
                     ?>
-                    <tbody>
+                    <tbody class="text-light">
                         <tr>
                             <td><?php echo $SrNo ?></td>
                             <td><?php echo $Title ?></td>
                             <td><?php echo $DateTime ?></td>
                             <td><?php echo $Author ?></td>
                             <td>
-                                <span class="badge badge-success">00</span>
-                                <span class="badge badge-danger">00</span>
+                                <span class="badge badge-success" style="width:100%;">
+                                    <?php 
+                                    ApproveCommentsAccordingToPost($PostId);
+                                    ?>
+                                </span>
+                                <span class="badge badge-danger" style="width:100%;">
+                                    <?php 
+                                    DisapproveCommentsAccordingToPost($PostId);
+                                    ?>
+                                </span>
                             </td>
-                            <td><span class="btn btn-info">Preview</span></td>
+                            <td><a target="_blank" href="fullpost.php?id=<?php echo $PostId; ?>"><span class="btn btn-info" style="width:100%;">Preview</span></a></td>
                         </tr>
                     </tbody>
                     <?php } ?>
