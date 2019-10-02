@@ -157,38 +157,25 @@ if(isset($_POST["Submit"])){
                       echo SuccessMessage();
                 ?>
                 
-                <form class="" action="addnewpost.php" method="post" enctype="multipart/form-data">
-                    <div class="card bg-secondary text-light mb-3 mt-3" style="height: auto;">
-                        <div class="card-body bg-dark">
+                <form class="" action="myprofile.php" method="post" enctype="multipart/form-data">
+                    <div class="card bg-dark text-light mb-3 mt-3" style="height: auto;">
+                        <div class="card-header bg-secondary text-light">
+                                    <h4>Edit Profile</h4>
+                                </div>
+                        <div class="card-body">
                             <div class="form-group">
-                                <label for="Title">
-                                    <span class="FieldInfo">
-                                    Post Title:
-                                    </span>
-                                </label>
-                                <input class="form-control" type:"text" name="PostTitle" id="title" placeholder="Type title here" value="">
+                                <input class="form-control" type:"text" name="Name" id="title" placeholder="Your name here" value="">
+                            
                             </div>
                             <hr>
                             <div class="form-group">
-                                <label for="CategoryTitle">
-                                    <span class="FieldInfo">
-                                    Choose Category:
-                                    </span>
-                                </label>
-                                <select class="form-control" id="CategoryTitle" name="Category">     
-                                    <?php
-                                    //Fetching all the categories from the category table
-                                    global $ConnectingDB;
-                                    $sql = "SELECT * FROM category";
-                                    $stmt = $ConnectingDB->query($sql);
-                                    while ($DateRows = $stmt->fetch()) {
-                                        $Id = $DateRows["id"];
-                                        $CategoryName = $DateRows["title"];
-                                
-                                    ?>
-                                    <option> <?php echo $CategoryName; ?></option>
-                                <?php } ?>
-                                </select>
+                                <input class="form-control" type:"text" id="title" placeholder="Headline" name="Headline" value="">
+                                <small class="text-muted">Add a professional headline.</small>
+                                <span class="text-danger">Not more than 12 characters</span>
+                            </div>
+                            <hr>
+                            <div class="form-group">
+                                <textarea placeholder="Bio" class="form-control" id="Post" name="Bio" rows="8" cols="80"></textarea>
                             </div>
                             <hr>
                             <div class="form-group mb-1">
@@ -207,17 +194,9 @@ if(isset($_POST["Submit"])){
                                     <img id="output_image"/>
                                 </div>
                                 <hr>
-                            <div class="form-group">
-                               <label for="Post">
-                                    <span class="FieldInfo">
-                                    Post:
-                                    </span>
-                                </label>
-                                <textarea class="form-control" id="Post" name="PostDescription" rows="8" cols="80"></textarea>
-                            </div>
                             <div class="row">
                                 <div class="col-lg-6 mb-2">
-                                    <a href="Dashboard.php" class="btn btn-warning btn-block">
+                                    <a href="dashboard.php" class="btn btn-warning btn-block">
                                         <i class="fas fa-arrow-left"></i> Back To Dashboard
                                     </a>
                                 </div>
