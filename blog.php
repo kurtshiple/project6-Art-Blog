@@ -133,7 +133,7 @@
                     <img src="uploads/<?php echo htmlentities($Image); ?>" style="min-height:450px; padding:10px" class="img-fluid card-img-top"/>
                     <div class="card-body">
                         <h4 class="card-title"><?php echo htmlentities($PostTitle); ?></h4>
-                        <span class="badge badge-dark">Category: <?php echo htmlentities($Category); ?></span> & Written By <?php echo htmlentities($Admin); ?> On <?php echo htmlentities($DateTime); ?>
+                        <span class="badge badge-dark">Category: <?php echo htmlentities($Category); ?></span> & Written By <a href="profile.php?username=<?php echo htmlentities($Admin); ?>"><?php echo htmlentities($Admin); ?></a> On <?php echo htmlentities($DateTime); ?>
                         <span style="float:right;" class="badge badge-dark">Comments: 
                         <?php echo ApproveCommentsAccordingToPost($PostID); ?>
                         </span>

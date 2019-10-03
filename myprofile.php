@@ -32,7 +32,7 @@ if(isset($_POST["Submit"])){
     echo $Image;
     $Target = "images/";
     
-if(strlen($Headline)>12){
+if(strlen($Headline)>30){
         $_SESSION["ErrorMessage"]= "Headline Must Be Less Than 12 Characters";
         Redirect_to("myprofile.php");   
     }elseif(strlen($ABio)>500){
@@ -162,7 +162,7 @@ if(strlen($Headline)>12){
                 ?>
                 
                 <form class="" action="myprofile.php" method="post" enctype="multipart/form-data">
-                    <div class="card bg-dark text-light mb-3 mt-3" style="height: auto;">
+                    <div class="card bg-dark text-light mb-3 py-2" style="height: auto;">
                         <div class="card-header bg-secondary text-light">
                                     <h4>Edit Profile</h4>
                                 </div>
@@ -175,7 +175,7 @@ if(strlen($Headline)>12){
                             <div class="form-group">
                                 <input class="form-control" type="text" id="title" placeholder="Headline" name="Headline" value="">
                                 <small class="text-muted">Add a professional headline.</small>
-                                <span class="text-danger">Not more than 12 characters</span>
+                                <span class="text-danger">Not more than 30 characters</span>
                             </div>
                             <hr>
                             <div class="form-group">
