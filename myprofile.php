@@ -15,52 +15,51 @@ $sql = "SELECT * FROM admins WHERE id='$AdminId'";
 $stmt = $ConnectingDB->query($sql);
 while ($DataRows = $stmt->fetch()){
     $ExistingName = $DataRows['aname'];
+    $ExistingUsername = $DataRows['username'];
+    $ExistingHeadline = $DataRows['aheadline'];
+    $ExistingBio = $DataRows['abio'];
+    $ExistingImage = $DataRows['aimage'];
+    
 }
 // Fetch the existing Admin Data End
 
 if(isset($_POST["Submit"])){
     
-    $PostTitle = $_POST["PostTitle"];
-    $Category = $_POST["Category"];
+    $AName = $_POST["Name"];
+    $AHeadline = $_POST["Headline"];
+    $ABio = $_POST["Bio"];
     $Image = $_FILES["Image"]["name"];
     echo $Image;
-    $Target = "uploads/";
-    $PostText = $_POST["PostDescription"];
-    $Admin = $_SESSION["UserName"]; 
-    date_default_timezone_set("America/New_York");
-    $CurrentTime=time();
-    $DateTime=strftime("%B-%d-%Y %H:%M:%S",$CurrentTime);
-        
-    if(empty($PostTitle)){
-        $_SESSION["ErrorMessage"]= "Title Can't Be Empty";
-        Redirect_to("addnewpost.php");       
-    }elseif(strlen($PostTitle)<3){
-        $_SESSION["ErrorMessage"]= "Post Title Must Be Greater Than 2 Characters";
-        Redirect_to("addnewpost.php");   
-    }elseif(strlen($PostText)>9999){
-        $_SESSION["ErrorMessage"]= "Post Description Must Be Less Than 10,000 Characters";
-        Redirect_to("addnewpost.php");   
+    $Target = "images/";
+    
+if(strlen($Headline)>12){
+        $_SESSION["ErrorMessage"]= "Headline Must Be Less Than 12 Characters";
+        Redirect_to("myprofile.php");   
+    }elseif(strlen($ABio)>500){
+        $_SESSION["ErrorMessage"]= "Bio Must Be Less Than 500 Characters";
+        Redirect_to("myprofile.php");   
     }else{
-        //query to insert post in DB when everything is fine
+           //query to update admin data in DB when everything is fine
         global $ConnectingDB;
-        $sql = "INSERT INTO posts(datetime,title,category,author,image,post)";
-        $sql .= "VALUES(:dateTime,:postTitle,:categoryName,:adminName,:imageName,:postDescription)";
-        $stmt = $ConnectingDB->prepare($sql);
-        $stmt->bindValue(':dateTime',$DateTime);
-        $stmt->bindValue(':postTitle',$PostTitle);
-        $stmt->bindValue(':categoryName',$Category);
-        $stmt->bindvalue(':adminName',$Admin);
-        $stmt->bindValue(':imageName',$Image);
-        $stmt->bindValue(':postDescription',$PostText);
-        $Execute=$stmt->execute();
+        if (!empty($_FILES["Image"]["name"])) {
+            $sql = "UPDATE admins 
+            SET aname='$AName', aheadline='$AHeadline', abio='$ABio', aimage='$Image'
+            WHERE id='$AdminId'";
+        }else {
+            $sql = "UPDATE admins 
+            SET aname='$Aname', aheadline='$AHeadline', abio='$ABio'
+            WHERE id='$AdminId'";
+        }
+        $Execute = $ConnectingDB->query($sql);
         move_uploaded_file ($_FILES["Image"]["tmp_name"], $Target.$Image);
 
+
     if($Execute){
-        $_SESSION["SuccessMessage"]="Post with id : ".$ConnectingDB->lastInsertId()." Added Successfully";
-        Redirect_to("addnewpost.php");
+        $_SESSION["SuccessMessage"]="Details Updated Successfully";
+        Redirect_to("myprofile.php");
     }else {
-        $_SESSION["ErrorMessage"]="Something went wrong. The image size may be too large. Try again!";
-        Redirect_to("addnewpost.php");
+        $_SESSION["ErrorMessage"]="Something went wrong. Try again!";
+        Redirect_to("myprofile.php");
     }
   
   }
@@ -126,7 +125,7 @@ if(isset($_POST["Submit"])){
         <div class="container">
             <div class="row">
                 <div class="col-md-12">
-                <h1><i class="fas fa-user mr-2" style="color:#27aae1;"></i> My Profile</h1>
+                <h1><i class="fas fa-user mr-2 text-success"></i>@<?php echo $ExistingUsername ?></h1>
                 </div>
             </div>
         </div>
@@ -141,12 +140,17 @@ if(isset($_POST["Submit"])){
             <div class="col-md-3">
                 <div class="card">
                     <div class="card-header bg-dark text-light">
-                        <h3><?php echo $ExistingName ?></h3>
+                        <h3><?php echo $ExistingName; ?></h3>
                     </div>
                     <div class="card-body">
-                        <img src="images/user.ong.png" class="block img-fluid mb-3" alt="">
+                        <img src="images/<?php echo $ExistingImage; ?>" class="block img-fluid mb-3" alt="">
+                        <hr>
                         <div class="">
-                            Tcuwcwijbiwbcwribwribwh
+                            <?php echo $ExistingHeadline ?>
+                        </div>
+                        <hr>
+                        <div class="">
+                            <?php echo $ExistingBio ?>
                         </div>
                     </div>
                 </div>
@@ -164,12 +168,12 @@ if(isset($_POST["Submit"])){
                                 </div>
                         <div class="card-body">
                             <div class="form-group">
-                                <input class="form-control" type:"text" name="Name" id="title" placeholder="Your name here" value="">
+                                <input class="form-control" type="text" name="Name" id="title" placeholder="Your name here" value="">
                             
                             </div>
                             <hr>
                             <div class="form-group">
-                                <input class="form-control" type:"text" id="title" placeholder="Headline" name="Headline" value="">
+                                <input class="form-control" type="text" id="title" placeholder="Headline" name="Headline" value="">
                                 <small class="text-muted">Add a professional headline.</small>
                                 <span class="text-danger">Not more than 12 characters</span>
                             </div>
