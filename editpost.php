@@ -213,7 +213,7 @@ if(isset($_POST["Submit"])){
                             </div>
                             <div class="row">
                                 <div class="col-lg-6 mb-2">
-                                    <a href="Dashboard.php" class="btn btn-warning btn-block">
+                                    <a href="dashboard.php" class="btn btn-warning btn-block">
                                         <i class="fas fa-arrow-left"></i> Back To Dashboard
                                     </a>
                                 </div>

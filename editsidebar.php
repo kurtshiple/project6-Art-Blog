@@ -1,56 +1,51 @@
 <?php require_once("includes/DB.php"); ?>
 <?php require_once("includes/Functions.php"); ?>
 <?php require_once("includes/sessions.php"); ?>
+<?php Confirm_Login(); ?>
+
+
 <?php 
-$_SESSION["TrackingURL"]=$_SERVER["PHP_SELF"];
+if(isset($_POST["Submit"])){
 
-Confirm_Login(); ?>
-
-
-<?php if(isset($_POST["Submit"])){
-
-    
-    $PostTitle = $_POST["PostTitle"];
-    $Category = $_POST["Category"];
+    $Headline = $_POST["Headline"];
     $Image = $_FILES["Image"]["name"];
     echo $Image;
-    $Target = "uploads/";
-    $PostText = $_POST["PostDescription"];
-    $Admin = $_SESSION["UserName"]; 
+    $Target = "uploadssidebar/";
+    $TextDescription = $_POST["TextDescription"];
+    $Admin = "Kurt"; 
     date_default_timezone_set("America/New_York");
     $CurrentTime=time();
     $DateTime=strftime("%B-%d-%Y %H:%M:%S",$CurrentTime);
         
-    if(empty($PostTitle)){
-        $_SESSION["ErrorMessage"]= "Title Can't Be Empty";
-        Redirect_to("addnewpost.php");       
-    }elseif(strlen($PostTitle)<3){
-        $_SESSION["ErrorMessage"]= "Post Title Must Be Greater Than 2 Characters";
-        Redirect_to("addnewpost.php");   
-    }elseif(strlen($PostText)>9999){
-        $_SESSION["ErrorMessage"]= "Post Description Must Be Less Than 10,000 Characters";
-        Redirect_to("addnewpost.php");   
+    if(empty($Headline)){
+        $_SESSION["ErrorMessage"]= "Headline Can't Be Empty";
+        Redirect_to("editsidebar.php");       
+    }elseif(strlen($Headline)<3){
+        $_SESSION["ErrorMessage"]= "Headline Must Be Greater Than 2 Characters";
+        Redirect_to("editsidebar.php");  
+    }elseif(strlen($TextDescription)>9999){
+        $_SESSION["ErrorMessage"]= "Text Must Be Less Than 10000 Characters";
+        Redirect_to("editsidebar.php");   
     }else{
         //query to insert post in DB when everything is fine
         global $ConnectingDB;
-        $sql = "INSERT INTO posts(datetime,title,category,author,image,post)";
-        $sql .= "VALUES(:dateTime,:postTitle,:categoryName,:adminName,:imageName,:postDescription)";
+        $sql = "INSERT INTO sidebarcontent(datetime,headline,image,text)";
+        $sql .= "VALUES(:dateTime,:headLine,:imageName,:textDescription)";
         $stmt = $ConnectingDB->prepare($sql);
         $stmt->bindValue(':dateTime',$DateTime);
-        $stmt->bindValue(':postTitle',$PostTitle);
-        $stmt->bindValue(':categoryName',$Category);
-        $stmt->bindvalue(':adminName',$Admin);
+        $stmt->bindValue(':headLine',$Headline);
         $stmt->bindValue(':imageName',$Image);
-        $stmt->bindValue(':postDescription',$PostText);
+        $stmt->bindValue(':textDescription',$TextDescription);
         $Execute=$stmt->execute();
         move_uploaded_file ($_FILES["Image"]["tmp_name"], $Target.$Image);
 
+
     if($Execute){
-        $_SESSION["SuccessMessage"]="Post with id : ".$ConnectingDB->lastInsertId()." Added Successfully";
-        Redirect_to("addnewpost.php");
+        $_SESSION["SuccessMessage"]="Post Updated Successfully";
+        Redirect_to("editsidebar.php");
     }else {
-        $_SESSION["ErrorMessage"]="Something went wrong. The image size may be too large. Try again!";
-        Redirect_to("addnewpost.php");
+        $_SESSION["ErrorMessage"]="Something went wrong. Try again!";
+        Redirect_to("editsidebar.php");
     }
   
   }
@@ -67,7 +62,7 @@ Confirm_Login(); ?>
     <script src="https://kit.fontawesome.com/baf56a4085.js" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <link rel="stylesheet" href="css/styles.css">
-    <title>Add New Post</title>
+    <title>Edit Sidebar</title>
 </head>
 <body>
     <!-- NAVBAR -->
@@ -79,7 +74,7 @@ Confirm_Login(); ?>
         <div class="container">
             <div class="row">
                 <div class="col-md-12">
-                <h1><i class="fas fa-edit" style="color:#27aae1;"></i> Add New Post</h1>
+                <h1><i class="fas fa-edit" style="color:#27aae1;"></i> Edit Sidebar</h1>
                 </div>
             </div>
         </div>
@@ -93,51 +88,46 @@ Confirm_Login(); ?>
             <div class="offset-lg-1 col-lg-10" style="min-height: 450px;">
                 <?php echo ErrorMessage();
                       echo SuccessMessage();
+                      // fetching existing content to be edited 
+                        global $ConnectingDB;
+                        $sql = "SELECT * FROM sidebarcontent ORDER BY id DESC LIMIT 1";
+                        $stmt = $ConnectingDB->query($sql);
+                        while ($DataRows=$stmt->fetch()) {
+                        $HeadlineToBeUpdated = $DataRows['headline'];
+                        $ImageToBeUpdated = $DataRows['image'];
+                        $TextToBeUpdated = $DataRows['text'];
+                        }
                 ?>
                 
-                <form class="" action="addnewpost.php" method="post" enctype="multipart/form-data">
+                <form class="" action="editsidebar.php" method="post" enctype="multipart/form-data">
                     <div class="card bg-secondary text-light mb-3 mt-3" style="height: auto;">
                         <div class="card-body bg-dark">
                             <div class="form-group">
                                 <label for="Title">
                                     <span class="FieldInfo">
-                                    Post Title:
+                                    Edit Headline:
                                     </span>
                                 </label>
-                                <input class="form-control" type:"text" name="PostTitle" id="title" placeholder="Type title here" value="">
+                                <input class="form-control" type="text" name="Headline" id="title" placeholder="Type title here" value="<?php echo $HeadlineToBeUpdated; ?>">
                             </div>
                             <hr>
-                            <div class="form-group">
-                                <label for="CategoryTitle">
-                                    <span class="FieldInfo">
-                                    Choose Category:
-                                    </span>
-                                </label>
-                                <select class="form-control" id="CategoryTitle" name="Category">     
-                                    <?php
-                                    //Fetching all the categories from the category table
-                                    global $ConnectingDB;
-                                    $sql = "SELECT * FROM category";
-                                    $stmt = $ConnectingDB->query($sql);
-                                    while ($DateRows = $stmt->fetch()) {
-                                        $Id = $DateRows["id"];
-                                        $CategoryName = $DateRows["title"];
-                                
-                                    ?>
-                                    <option> <?php echo $CategoryName; ?></option>
-                                <?php } ?>
-                                </select>
-                            </div>
+                            
                             <hr>
                             <div class="form-group mb-1">
-                                <label for="CategoryTitle">
-                                    <span class="FieldInfo">
-                                    Choose Cover Image:
+                                <span class="FieldInfo">
+                                    Image:
                                     </span>
-                                </label>
+                                    <div id="wrapper">
+                                        <img src="uploadssidebar/<?php echo $ImageToBeUpdated;?>" style="max-width:100%;"/>
+                                    </div>
+                                <hr>
+                                <span class="FieldInfo">
+                                    Update Image:
+                                </span>
+                                <hr>
                                 <div class="custom-file">
                                     <input class="custom-file-input" type="File" accept="image/*" onchange="preview_image(event)" name="Image" id="imageSelect" value="" />
-                                    <label for="imageSelect" class="custom-file-label">Select Image</label>
+                                    <label for="imageSelect" class="custom-file-label">Update Image</label>
                                     
                                 </div>
                                 <hr>
@@ -148,14 +138,16 @@ Confirm_Login(); ?>
                             <div class="form-group">
                                <label for="Post">
                                     <span class="FieldInfo">
-                                    Post:
+                                    Update Text:
                                     </span>
                                 </label>
-                                <textarea class="form-control" id="Post" name="PostDescription" rows="8" cols="80"></textarea>
+                                <textarea class="form-control" id="Post" name="TextDescription" rows="8" cols="80">
+                                    <?php echo $TextToBeUpdated;?>
+                                </textarea>
                             </div>
                             <div class="row">
                                 <div class="col-lg-6 mb-2">
-                                    <a href="Dashboard.php" class="btn btn-warning btn-block">
+                                    <a href="dashboard.php" class="btn btn-warning btn-block">
                                         <i class="fas fa-arrow-left"></i> Back To Dashboard
                                     </a>
                                 </div>

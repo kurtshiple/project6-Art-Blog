@@ -1,3 +1,30 @@
+
+<?php require_once("includes/DB.php"); ?>
+<?php require_once("includes/Functions.php"); ?>
+<?php require_once("includes/sessions.php"); ?>
+<!-- Fetching Existing Data -->
+<?php 
+        $SearchQueryParameter = $_GET["username"];
+        global $ConnectingDB;
+        $sql="SELECT aname,aheadline,abio,aimage FROM admins WHERE username=:username";
+        $stmt=$ConnectingDB->prepare($sql);
+        $stmt->bindValue(':username', $SearchQueryParameter);
+        $stmt->execute();
+$Result = $stmt->rowcount();
+if($Result==1){
+    while ($Datarows=$stmt->fetch()){
+        $ExistingName=$Datarows["aname"];
+        $ExistingBio=$Datarows["abio"];
+        $ExistingImage=$Datarows["aimage"];
+        $ExistingHeadline=$Datarows["aheadline"];
+    }
+}else{
+    $_SESSION["ErrorMessage"]="Bad Request!";
+    Redirect_to("blog.php?pages=1");
+}   
+    
+    
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -52,12 +79,12 @@
     <!-- NAVBAR END -->
 
     <!--- HEADER -->
-    <header class="bg-dark text-white py-5">
+    <header class="bg-dark text-white py-2">
         <div class="container">
             <div class="row">
                 <div class="col-md-6">
-                <h1><i class="fas fa-user text-success mr-2"></i> Name</h1>
-                <h3>Headline</h3>
+                <h1><i class="fas fa-user text-success mr-2"></i><?php echo $ExistingName; ?> </h1>
+                <h3><?php echo $ExistingHeadline; ?></h3>
                 </div>
             </div>
         </div>
@@ -69,12 +96,12 @@
     <section class="container py-2 mb-4">
         <div class="row">
             <div class="col-md-3">
-                <img src="images/user.ong.png" class="d-block img-fluid mb-3 rounded-circle" alt="">
+                <img src="images/<?php echo $ExistingImage; ?>" class="d-block img-fluid mb-3 rounded-circle" alt="">
             </div>
             <div class="col-md-9" style="min-height:440px">
                 <div class="card">
                     <div class="card-body">
-                        <p class="lead"></p>
+                        <p class="lead"><?php echo $ExistingBio; ?></p>
                     </div>
                 </div>
             </div>

@@ -59,44 +59,7 @@ Confirm_Login();
 </head>
 <body>
     <!-- NAVBAR -->
-    <div style="height: 10px; background: #27aae1;"></div>
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-        <div class="container">
-            <a href="#" class="navbar-brand">MARYSART.COM</a>
-            <button class="navbar-toggler" data-toggle="collapse" data-target="#navbarcollapseCMS">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarcollapseCMS">
-            <ul class="navbar-nav mr-auto">
-                <li class="nav-item">
-                    <a href="myprofile.php" class="nav-link"><i class="fas fa-user"></i> My Profile</a>
-                </li>
-                <li class="nav-item">
-                    <a href="dashboard.php" class="nav-link"><i class="fas fa-desktop"></i> Dashboard</a>
-                </li>
-                <li class="nav-item">
-                    <a href="posts.php" class="nav-link"><i class="fas fa-align-left"></i> Posts</a>
-                </li>
-                <li class="nav-item">
-                    <a href="categories.php" class="nav-link"><i class="fas fa-th-large"></i> Categories</a>
-                </li>
-                <li class="nav-item">
-                    <a href="admins.php" class="nav-link"><i class="fas fa-users-cog"></i> Manage Admins</a>
-                </li>
-                <li class="nav-item">
-                    <a href="comments.php" class="nav-link"><i class="fas fa-comments"></i> Comments</a>
-                </li>
-                <li class="nav-item">
-                    <a href="blog.php?page=1" class="nav-link"><i class="fab fa-elementor"></i> Live Blog</a>
-                </li>
-            </ul>
-            <ul class="navbar-nav ml-auto">
-                <li class="nav-item"><a href="logout.php" class="nav-link text-danger"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
-            </ul>
-            </div>
-        </div>
-    </nav>
-    <div style="height: 10px; background: #27aae1;"></div>
+    <?php require_once("privatenavbar.php"); ?>
     <!-- NAVBAR END -->
 
     <!--- HEADER -->
@@ -138,7 +101,7 @@ Confirm_Login();
                             </div>
                             <div class="row">
                                 <div class="col-lg-6 mb-2">
-                                    <a href="Dashboard.php" class="btn btn-warning btn-block">
+                                    <a href="dashboard.php" class="btn btn-warning btn-block">
                                         <i class="fas fa-arrow-left"></i> Back To Dashboard
                                     </a>
                                 </div>
@@ -210,17 +173,7 @@ Confirm_Login();
 
 
     <!-- FOOTER -->
-    <div style="height: 10px; background: #27aae1;"></div>
-    <footer class="bg-dark text-white text-align">
-        <div class="container">
-            <div class="row">
-                <div class="col">
-                    <p class="lead text-center">Theme By | Kurt Shiple | <span id="year"></span> &copy; ----All Rights Reserved.</p>
-                </div>
-            </div>
-        </div>
-    </footer>
-    <div style="height: 10px; background: #27aae1;"></div>
+    <?php require_once("footer.php"); ?>
 
     <!-- FOOTER END -->
 

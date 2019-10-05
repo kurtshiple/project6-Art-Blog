@@ -56,44 +56,8 @@
 </head>
 <body>
     <!-- NAVBAR -->
-    <div style="height: 10px; background: #27aae1;"></div>
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-        <div class="container">
-            <a href="#" class="navbar-brand">MARYSART.COM</a>
-            <button class="navbar-toggler" data-toggle="collapse" data-target="#navbarcollapseCMS">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarcollapseCMS">
-            <ul class="navbar-nav mr-auto">
-                <li class="nav-item">
-                    <a href="blog.php?page=1" class="nav-link"><i class="fas fa-home"></i> Home</a>
-                </li>
-                <li class="nav-item">
-                    <a href="#" class="nav-link"><i class="fas fa-info-circle"></i> About Us</a>
-                </li>
-                <li class="nav-item">
-                    <a href="blog.php?page=1" class="nav-link"><i class="fab fa-elementor"></i> Blog</a>
-                </li>
-                <li class="nav-item">
-                    <a href="comments.php" class="nav-link"><i class="fas fa-at"></i> Contact Us</a>
-                </li>
-                <li class="nav-item">
-                    <a href="blog.php" class="nav-link"><i class="fas fa-sitemap"></i> Features</a>
-                </li>
-            </ul>
-            <ul class="navbar-nav ml-auto">
-                <form class="form-inline d-none d-sm-block" action="blog.php">
-                    <div class="form-group">
-                        <input class="form-control mr-2" type="text" name="Search" placeholder="Type Here..." value="">
-                        <button class="btn btn-primary" name="SearchButton">Search</button>
-                        
-                    </div>
-                </form>
-            </ul>
-            </div>
-        </div>
-    </nav>
-    <div style="height: 10px; background: #27aae1;"></div>
+    <?php require_once("publicnavbar.php"); ?>
+
     <!-- NAVBAR END -->
 
     <!--- HEADER -->
@@ -108,9 +72,7 @@
                     echo ErrorMessage();
                     echo SuccessMessage();
                 ?>
-                <h1>Complete Responsive CMS Art Blog</h1>
-                <h1 class="lead">PHP, HTML, Bootstrap, and MySQL</h1>
-                <hr>
+                
                 <?php
                 global $ConnectingDB;
                 // SQL query when search button is activated and else is otherwise
@@ -129,10 +91,15 @@
                     $PostIdFromURL = $_GET["id"];
                     if (!isset($PostIdFromURL)){
                         $_SESSION["ErrorMessage"]="Bad Request.";
-                        Redirect_to("blog.php");
+                        Redirect_to("blog.php?page=1");
                     }
                     $sql = "SELECT * FROM posts WHERE id = '$PostIdFromURL'";
                     $stmt = $ConnectingDB->query($sql);
+                    $Result=$stmt->rowcount();
+                    if ($Result!=1) {
+                        $_SESSION["ErrorMessage"]="Bad Request.";
+                        Redirect_to("blog.php?page=1");
+                    }
                 }
                 while ($DataRows = $stmt->fetch()) {
                     $PostID = $DataRows["id"];
@@ -147,10 +114,10 @@
                 ?>
                 <div class="card mb-3">
                     
-                    <img src="uploads/<?php echo htmlentities($Image); ?>" style="max-height:450px; padding:10px" class="img-fluid card-img-top"/>
+                    <img src="uploads/<?php echo htmlentities($Image); ?>" style="min-height:450px; padding:10px" class="img-fluid card-img-top"/>
                     <div class="card-body">
                         <h4 class="card-title"><?php echo htmlentities($PostTitle); ?></h4>
-                        <span class="badge badge-dark">Category: <?php echo htmlentities($Category); ?></span> & Written By <?php echo htmlentities($Admin); ?> On <?php echo htmlentities($DateTime); ?>
+                        <span class="badge badge-dark">Category: <a href="blog.php?category=<?php echo htmlentities($Category); ?>"><?php echo htmlentities($Category); ?></a></span> & Written By <a href="profile.php?username=<?php echo htmlentities($Admin); ?>"><?php echo htmlentities($Admin); ?></a> On <?php echo htmlentities($DateTime); ?>
                         <span style="float:right;" class="badge badge-dark">Comments: 
                         <?php echo ApproveCommentsAccordingToPost($PostID); ?>
                         </span>
@@ -192,7 +159,7 @@
                                 </div>
                             </div>
                             <div class="form-group">
-                                <textarea name="CommenterText" class="form-control" rows="6" cols="80"></textarea>
+                                <textarea name="CommenterText" class="form-control" rows="6" cols="80" placeholder="Comment must be under 1,000 characters"></textarea>
                             </div>
                             <div class="">
                                 <button type="submit" name="Submit" class="btn btn-primary">Submit</button>
@@ -247,88 +214,7 @@
             
             </div>
             <!-- Side Area Start -->
-            <!-- Side Area Start -->
-            <div class="col-sm-4">
-                <div class="card mt-4">
-                    <div class="card-body">
-                        <img src="images/Adolph_Tidemand_-_Low_Church_Devotion_-_Google_Art_Project.jpg" class="d-block img-fluid mb-3" alt="">
-                        <div class="text-center">
-                            The passage experienced a surge in popularity during the 1960s when Letraset used it on their dry-transfer sheets, and again during the 90s as desktop publishers bundled the text with their software. Today it's seen all around the web; on templates, websites, and stock designs. Use our generator to get your own, or read on for the authoritative history of lorem ipsum.
-
-
-                        </div>
-                    </div>
-                </div>
-                <br>
-                <div class="card">
-                    <div class="card-header bg-dark text-light">
-                        <h2 class="lead">Sign Up!</h2>
-                    </div>
-                    <div class="card-body">
-                        <button type="button" class="btn btn-success btn-block text-center text-white mb-4" name="button">Join the Forum</button>
-                        <button type="button" class="btn btn-danger btn-block text-center text-white mb-4" name="button">Login</button>
-                        <div class="input-group mb-3">
-                            <input type="text" class="form-control" name="" placeholder="Enter your email" value="">
-                            <div class="input-group-append">
-                                <button type="button" class="btn btn-primary btn-sm text-center text-white" name="button">Subscribe Now</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <br>
-                <div class="card">
-                    <div class="card-header bg-primary text-light">
-                        <h2 class="lead">Categories</h2>
-                        </div>
-                        <div class="card-body">
-                            <?php
-                            global $ConnectingDB;
-                            $sql = "SELECT * FROM category ORDER BY id desc";
-                            $stmt = $ConnectingDB->query($sql);
-                            while ($DataRows = $stmt->fetch()) {
-                                $CategoryId = $DataRows["id"];
-                                $CategoryName = $DataRows["title"];
-                                ?>
-                            
-                            <a href="blog.php?category=<?php echo $CategoryName; ?>"><span class="heading"><?php echo $CategoryName; ?></span></a><br>
-                            
-                            <?php } ?>
-                        
-                    </div>
-                </div>
-                <br>
-                <div class="card">
-                    <div class="card-header bg-info text-white">
-                        <h2 class="lead"> Recent Posts</h2>
-                    </div>
-                    <div class="card-body">
-                        <?php 
-                        global $ConnectingDB;
-                        $sql = "SELECT * FROM posts ORDER BY id desc LIMIT 0,5";
-                        $stmt= $ConnectingDB->query($sql);
-                        while ($DataRows=$stmt->fetch()) {
-                            $Id = $DataRows['id'];
-                            $Title = $DataRows['title'];
-                            $DateTime = $DataRows['datetime'];
-                            $Image = $DataRows['image'];
-                        
-                        ?>
-                        <div class="media">
-                            
-                            <img src="uploads/<?php echo htmlentities($Image); ?>" class="d-block img-fluid align-self-start" width="50%" height="100px" alt="">
-                            <div class="media-body ml-2">
-                                <a href="fullpost.php?id=<?php echo htmlentities($Id); ?>" target="_blank"><h6 class="lead"><?php echo htmlentities($Title); ?></h6></a>
-                                <p class="small"><?php echo htmlentities($DateTime); ?></p>
-                            </div>
-                            
-                        </div>
-                        
-                        <hr>
-                        <?php } ?>
-                    </div>
-                </div>
-            </div>
-            <!-- Side Area End -->
+            <?php require_once("sidearea.php"); ?>
             <!-- Side Area End -->
         </div>
     </div>
@@ -342,17 +228,7 @@
 
 
     <!-- FOOTER -->
-    <div style="height: 10px; background: #27aae1;"></div>
-    <footer class="bg-dark text-white text-align">
-        <div class="container">
-            <div class="row">
-                <div class="col">
-                    <p class="lead text-center">Theme By | Kurt Shiple | <span id="year"></span> &copy; ----All Rights Reserved.</p>
-                </div>
-            </div>
-        </div>
-    </footer>
-    <div style="height: 10px; background: #27aae1;"></div>
+    <?php require_once("footer.php"); ?>
 
     <!-- FOOTER END -->
 
