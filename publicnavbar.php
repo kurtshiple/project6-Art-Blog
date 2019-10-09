@@ -13,16 +13,13 @@
                     <a href="blog.php?page=1" class="nav-link text-white"><i class="fas fa-home"></i> Home</a>
                 </li>
                 <li class="nav-item">
-                    <a href="#" class="nav-link text-white"><i class="fas fa-info-circle"></i> About Us</a>
-                </li>
-                <li class="nav-item">
-                    <a href="blog.php?page=1" class="nav-link text-white"><i class="fab fa-elementor"></i> Blog</a>
-                </li>
-                <li class="nav-item">
-                    <a href="contact.php" class="nav-link text-white"><i class="fas fa-at"></i> Contact Us</a>
-                </li>
-                <li class="nav-item">
                     <a href="gallery.php" class="nav-link text-white"><i class="fas fa-th"></i> Gallery</a>
+                </li>
+                <li class="nav-item">
+                    <a href="aboutpage.php" class="nav-link text-white"><i class="fas fa-info-circle"></i> About Us</a>
+                </li>
+                <li class="nav-item">
+                    <a href="contactpage.php" class="nav-link text-white"><i class="fas fa-at"></i> Contact Us</a>
                 </li>
             </ul>
             <ul class="navbar-nav ml-auto">

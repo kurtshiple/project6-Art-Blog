@@ -45,10 +45,10 @@ if (isset($_POST["Submit"])){
 </head>
 <body>
     <!-- NAVBAR -->
-    <div style="height: 10px; background: #27aae1;"></div>
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div style="height: 10px; background: #88E17B;"></div>
+    <nav class="navbar navbar-expand-lg navbar-dark" style="background-color: #0CA3BA;">
         <div class="container">
-            <a href="#" class="navbar-brand">MARYSART.COM</a>
+            <a href="blog.php" class="navbar-brand">MARYSART.COM</a>
             <button class="navbar-toggler" data-toggle="collapse" data-target="#navbarcollapseCMS">
                 <span class="navbar-toggler-icon"></span>
             </button>
@@ -58,18 +58,11 @@ if (isset($_POST["Submit"])){
             </div>
         </div>
     </nav>
-    <div style="height: 10px; background: #27aae1;"></div>
+    <div style="height: 10px; background: #88E17B;"></div>
     <!-- NAVBAR END -->
 
     <!--- HEADER -->
-    <header class="bg-dark text-white py-2">
-        <div class="container">
-            <div class="row">
-                <div class="col-md-12">
-                </div>
-            </div>
-        </div>
-    </header>
+    
     <!--- HEADER END -->
     
     <!--- Main Area -->
@@ -119,17 +112,7 @@ if (isset($_POST["Submit"])){
 
 
     <!-- FOOTER -->
-    <div style="height: 10px; background: #27aae1;"></div>
-    <footer class="bg-dark text-white text-align">
-        <div class="container">
-            <div class="row">
-                <div class="col">
-                    <p class="lead text-center">Theme By | Kurt Shiple | <span id="year"></span> &copy; ----All Rights Reserved.</p>
-                </div>
-            </div>
-        </div>
-    </footer>
-    <div style="height: 10px; background: #27aae1;"></div>
+    <?php require_once("footer.php"); ?>
 
     <!-- FOOTER END -->
 

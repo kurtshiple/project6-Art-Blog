@@ -67,7 +67,7 @@
        
             <!-- Main Area Start -->
             <div class="col-sm-8" style="min-height:40px;">
-                <hr>
+                
                 <?php
                     echo ErrorMessage();
                     echo SuccessMessage();
@@ -112,7 +112,7 @@
                     
                 
                 ?>
-                <div class="card mb-3">
+                <div class="card mb-3 mt-4">
                     
                     <img src="uploads/<?php echo htmlentities($Image); ?>" style="min-height:450px; padding:10px" class="img-fluid card-img-top"/>
                     <div class="card-body">

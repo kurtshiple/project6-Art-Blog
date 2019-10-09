@@ -57,6 +57,16 @@ Confirm_Login();
                         <i class="fas fa-edit"></i> Edit Sidebar
                     </a>
                 </div>
+                <div class="col-lg-3 mt-2">
+                    <a href="editaboutpage.php" class="btn btn-primary btn-block">
+                        <i class="fas fa-edit"></i> Edit About Page
+                    </a>
+                </div>
+                <div class="col-lg-3 mt-2">
+                    <a href="https://pixlr.com/" target="_blank" class="btn btn-primary btn-block">
+                        <i class="far fa-image"></i> Pixlr Photo Editor
+                    </a>
+                </div>
             </div>
         </div>
     </header>

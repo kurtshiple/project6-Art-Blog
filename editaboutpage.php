@@ -5,50 +5,49 @@
 
 
 <?php 
-$SearchQueryParameter = $_GET['id'];
 if(isset($_POST["Submit"])){
 
-    $PostTitle = $_POST["PostTitle"];
-    $Category = $_POST["Category"];
+    $Headline = $_POST["Headline"];
     $Image = $_FILES["Image"]["name"];
     echo $Image;
-    $Target = "uploads/";
-    $PostText = $_POST["PostDescription"];
+    $Target = "uploadsaboutpage/";
+    $TextDescription = $_POST["TextDescription"];
     $Admin = "Kurt"; 
     date_default_timezone_set("America/New_York");
     $CurrentTime=time();
     $DateTime=strftime("%B-%d-%Y %H:%M:%S",$CurrentTime);
         
-    if(empty($PostTitle)){
-        $_SESSION["ErrorMessage"]= "Title Can't Be Empty";
-        Redirect_to("editpost.php?id=$SearchQueryParameter");       
-    }elseif(strlen($PostTitle)<3){
-        $_SESSION["ErrorMessage"]= "Post Title Must Be Greater Than 2 Characters";
-        Redirect_to("editpost.php?id=$SearchQueryParameter");  
-    }elseif(strlen($PostText)>9999){
-        $_SESSION["ErrorMessage"]= "Post Description Must Be Less Than 10000 Characters";
-        Redirect_to("editpost.php?id=$SearchQueryParameter");   
+    if(empty($Headline)){
+        $_SESSION["ErrorMessage"]= "Headline Can't Be Empty";
+        Redirect_to("editaboutpage.php");       
+    }elseif(strlen($Headline)<3){
+        $_SESSION["ErrorMessage"]= "Headline Must Be Greater Than 2 Characters";
+        Redirect_to("editaboutpage.php");  
+    }elseif(strlen($TextDescription)>9999){
+        $_SESSION["ErrorMessage"]= "Text Must Be Less Than 10000 Characters";
+        Redirect_to("editaboutpage.php");   
     }else{
-        //query to update post in DB when everything is fine
+        // query to insert comment in DB when everything is fine.
         global $ConnectingDB;
-        if (!empty($_FILES["Image"]["name"])) {
-            $sql = "UPDATE posts 
-            SET title='$PostTitle', category='$Category', image='$Image', post='$PostText'
-            WHERE id='$SearchQueryParameter'";
-        }else {
-            $sql = "UPDATE posts 
-            SET title='$PostTitle', category='$Category', post='$PostText'
-            WHERE id='$SearchQueryParameter'";
-        }
-        $Execute = $ConnectingDB->query($sql);
+        $sql = "INSERT INTO aboutpage(datetime,headline,text,image)";
+        $sql .= "VALUES(:dateTime,:headLine,:Text,:Image)";
+        $stmt = $ConnectingDB->prepare($sql);
+        $stmt->bindValue(':dateTime',$DateTime);
+        $stmt->bindvalue(':headLine',$Headline);
+        $stmt->bindValue(':Text',$TextDescription);
+        $stmt->bindValue(':Image',$Image);
+        
+
+        $Execute=$stmt->execute();
         move_uploaded_file ($_FILES["Image"]["tmp_name"], $Target.$Image);
 
+
     if($Execute){
-        $_SESSION["SuccessMessage"]="Post Updated Successfully";
-        Redirect_to("posts.php");
+        $_SESSION["SuccessMessage"]="About Page Updated Successfully";
+        Redirect_to("editaboutpage.php");
     }else {
         $_SESSION["ErrorMessage"]="Something went wrong. Try again!";
-        Redirect_to("posts.php");
+        Redirect_to("editaboutpage.php");
     }
   
   }
@@ -65,7 +64,7 @@ if(isset($_POST["Submit"])){
     <script src="https://kit.fontawesome.com/baf56a4085.js" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <link rel="stylesheet" href="css/styles.css">
-    <title>Edit Post</title>
+    <title>Edit About Page</title>
 </head>
 <body>
     <!-- NAVBAR -->
@@ -77,7 +76,7 @@ if(isset($_POST["Submit"])){
         <div class="container">
             <div class="row">
                 <div class="col-md-12">
-                <h1><i class="fas fa-edit" style="color:#27aae1;"></i> Edit Post</h1>
+                <h1><i class="fas fa-edit" style="color:#27aae1;"></i> Edit About Page</h1>
                 </div>
             </div>
         </div>
@@ -93,70 +92,44 @@ if(isset($_POST["Submit"])){
                       echo SuccessMessage();
                       // fetching existing content to be edited 
                         global $ConnectingDB;
-                        $sql = "SELECT * FROM posts WHERE id='$SearchQueryParameter'";
+                        $sql = "SELECT * FROM aboutpage ORDER BY id DESC LIMIT 1";
                         $stmt = $ConnectingDB->query($sql);
                         while ($DataRows=$stmt->fetch()) {
-                        $TitleToBeUpdated = $DataRows['title'];
-                        $CategoryToBeUpdated = $DataRows['category'];
+                        $HeadlineToBeUpdated = $DataRows['headline'];
+                        $TextToBeUpdated = $DataRows['text'];
                         $ImageToBeUpdated = $DataRows['image'];
-                        $PostToBeUpdated = $DataRows['post'];
-                    }
+                        }
                 ?>
                 
-                <form class="" action="editpost.php?id=<?php echo $SearchQueryParameter; ?>" method="post" enctype="multipart/form-data">
+                <form class="" action="editaboutpage.php" method="post" enctype="multipart/form-data">
                     <div class="card bg-secondary text-light mb-3 mt-3" style="height: auto;">
                         <div class="card-body bg-dark">
                             <div class="form-group">
                                 <label for="Title">
                                     <span class="FieldInfo">
-                                    Edit Post Title:
+                                    Edit Headline:
                                     </span>
                                 </label>
-                                <input class="form-control" type:"text" name="PostTitle" id="title" placeholder="Type title here" value="<?php echo $TitleToBeUpdated; ?>">
+                                <input class="form-control" type="text" name="Headline" id="title" placeholder="Type title here" value="<?php echo $HeadlineToBeUpdated; ?>">
                             </div>
                             <hr>
-                            <div class="form-group">
-                                <label for="CategoryTitle">
-                                    <span class="FieldInfo">
-                                    Category:
-                                    </span>
-                                    <?php echo $CategoryToBeUpdated; ?>
-                                    <hr>
-                                    <span class="FieldInfo">
-                                    Edit Category:
-                                    </span>
-                                </label>
-                                <select class="form-control" id="CategoryTitle" name="Category">     
-                                    <?php
-                                    //Fetching all the categories from the category table
-                                    global $ConnectingDB;
-                                    $sql = "SELECT * FROM category";
-                                    $stmt = $ConnectingDB->query($sql);
-                                    while ($DateRows = $stmt->fetch()) {
-                                        $Id = $DateRows["id"];
-                                        $CategoryName = $DateRows["title"];
-                                
-                                    ?>
-                                    <option> <?php echo $CategoryName; ?></option>
-                                <?php } ?>
-                                </select>
-                            </div>
+                            
                             <hr>
                             <div class="form-group mb-1">
                                 <span class="FieldInfo">
                                     Image:
                                     </span>
                                     <div id="wrapper">
-                                        <img src="uploads/<?php echo $ImageToBeUpdated;?>" style="max-width:100%;"/>
+                                        <img src="uploadsaboutpage/<?php echo $ImageToBeUpdated;?>" style="max-width:100%;"/>
                                     </div>
                                 <hr>
                                 <span class="FieldInfo">
-                                    Edit Image:
+                                    Update Image:
                                 </span>
                                 <hr>
                                 <div class="custom-file">
                                     <input class="custom-file-input" type="File" accept="image/*" onchange="preview_image(event)" name="Image" id="imageSelect" value="" />
-                                    <label for="imageSelect" class="custom-file-label">Select Image</label>
+                                    <label for="imageSelect" class="custom-file-label">Update Image</label>
                                     
                                 </div>
                                 <hr>
@@ -167,11 +140,11 @@ if(isset($_POST["Submit"])){
                             <div class="form-group">
                                <label for="Post">
                                     <span class="FieldInfo">
-                                    Edit Post:
+                                    Update Text:
                                     </span>
                                 </label>
-                                <textarea class="form-control" id="Post" name="PostDescription" rows="8" cols="80">
-                                    <?php echo $PostToBeUpdated;?>
+                                <textarea class="form-control" id="Post" name="TextDescription" rows="8" cols="80">
+                                    <?php echo $TextToBeUpdated;?>
                                 </textarea>
                             </div>
                             <div class="row">
