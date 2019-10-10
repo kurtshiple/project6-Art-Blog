@@ -38,7 +38,7 @@
                                 $CategoryName = $DataRows["title"];
                                 ?>
                             
-                            <a href="blog.php?category=<?php echo $CategoryName; ?>"><span class="heading"><?php echo $CategoryName; ?></span></a><br>
+                            <a href="index.php?category=<?php echo $CategoryName; ?>"><span class="heading"><?php echo $CategoryName; ?></span></a><br>
                             
                             <?php } ?>
                         

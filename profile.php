@@ -20,7 +20,7 @@ if($Result==1){
     }
 }else{
     $_SESSION["ErrorMessage"]="Bad Request!";
-    Redirect_to("blog.php?pages=1");
+    Redirect_to("index.php?pages=1");
 }   
     
     
@@ -38,44 +38,7 @@ if($Result==1){
 </head>
 <body>
     <!-- NAVBAR -->
-    <div style="height: 10px; background: #27aae1;"></div>
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-        <div class="container">
-            <a href="#" class="navbar-brand">MARYSART.COM</a>
-            <button class="navbar-toggler" data-toggle="collapse" data-target="#navbarcollapseCMS">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarcollapseCMS">
-            <ul class="navbar-nav mr-auto">
-                <li class="nav-item">
-                    <a href="blog.php?page=1" class="nav-link"><i class="fas fa-home"></i> Home</a>
-                </li>
-                <li class="nav-item">
-                    <a href="#" class="nav-link"><i class="fas fa-info-circle"></i> About Us</a>
-                </li>
-                <li class="nav-item">
-                    <a href="blog.php?page=1" class="nav-link"><i class="fab fa-elementor"></i> Blog</a>
-                </li>
-                <li class="nav-item">
-                    <a href="comments.php" class="nav-link"><i class="fas fa-at"></i> Contact Us</a>
-                </li>
-                <li class="nav-item">
-                    <a href="blog.php" class="nav-link"><i class="fas fa-sitemap"></i> Features</a>
-                </li>
-            </ul>
-            <ul class="navbar-nav ml-auto">
-                <form class="form-inline d-none d-sm-block" action="blog.php">
-                    <div class="form-group">
-                        <input class="form-control mr-2" type="text" name="Search" placeholder="Type Here..." value="">
-                        <button class="btn btn-primary" name="SearchButton">Search</button>
-                        
-                    </div>
-                </form>
-            </ul>
-            </div>
-        </div>
-    </nav>
-    <div style="height: 10px; background: #27aae1;"></div>
+    <?php require_once("privatenavbar.php"); ?>
     <!-- NAVBAR END -->
 
     <!--- HEADER -->
@@ -114,17 +77,7 @@ if($Result==1){
 
 
     <!-- FOOTER -->
-    <div style="height: 10px; background: #27aae1;"></div>
-    <footer class="bg-dark text-white text-align">
-        <div class="container">
-            <div class="row">
-                <div class="col">
-                    <p class="lead text-center">Theme By | Kurt Shiple | <span id="year"></span> &copy; ----All Rights Reserved.</p>
-                </div>
-            </div>
-        </div>
-    </footer>
-    <div style="height: 10px; background: #27aae1;"></div>
+    <?php require_once("footer.php"); ?>
 
     <!-- FOOTER END -->
 

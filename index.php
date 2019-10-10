@@ -95,7 +95,7 @@
                     $stmt = $ConnectingDB->prepare($sql);
                     $stmt->bindValue(':search','%'.$Search.'%');
                     $stmt->execute();
-                  //Query When pagination is active i.e. Blog.php?pages=1  
+                  //Query When pagination is active i.e. index.php?pages=1  
                 }elseif(isset($_GET["page"])){
                     $Page = $_GET["page"];
                     if($Page==0||$Page<1){
@@ -136,7 +136,7 @@
                     <img src="uploads/<?php echo htmlentities($Image); ?>" style="min-height:450px; padding:10px" class="img-fluid card-img-top"/>
                     <div class="card-body">
                         <h4 class="card-title"><?php echo htmlentities($PostTitle); ?></h4>
-                        <span class="badge badge-dark">Category: <a href="blog.php?category=<?php echo htmlentities($Category); ?>"><?php echo htmlentities($Category); ?></a></span> & Written By <a href="profile.php?username=<?php echo htmlentities($Admin); ?>"><?php echo htmlentities($Admin); ?></a> On <?php echo htmlentities($DateTime); ?>
+                        <span class="badge badge-dark">Category: <a href="index.php?category=<?php echo htmlentities($Category); ?>"><?php echo htmlentities($Category); ?></a></span> & Written By <a href="profile.php?username=<?php echo htmlentities($Admin); ?>"><?php echo htmlentities($Admin); ?></a> On <?php echo htmlentities($DateTime); ?>
                         <span style="float:right;" class="badge badge-dark">Comments: 
                         <?php echo ApproveCommentsAccordingToPost($PostID); ?>
                         </span>
@@ -166,7 +166,7 @@
                         <?php if (isset($Page)) { 
                         if ($Page>1){?>
                             <li class="page-item">
-                                <a href="blog.php?page=<?php echo $Page-1; ?>" class="page-link">&laquo;</a>
+                                <a href="index.php?page=<?php echo $Page-1; ?>" class="page-link">&laquo;</a>
                             </li>
                         <?php } } ?>
                         <?php 
@@ -183,12 +183,12 @@
                             if(isset($Page)){
                                 if($i==$Page){  ?>
                             <li class="page-item active">
-                                <a href="blog.php?page=<?php echo $i; ?>" class="page-link"><?php echo $i; ?></a>
+                                <a href="index.php?page=<?php echo $i; ?>" class="page-link"><?php echo $i; ?></a>
                             </li>
                         <?php 
                             }else {
                             ?>     <li class="page-item">
-                                    <a href="blog.php?page=<?php echo $i; ?>" class="page-link"><?php echo $i; ?></a>
+                                    <a href="index.php?page=<?php echo $i; ?>" class="page-link"><?php echo $i; ?></a>
                                     </li>
                            <?php }    
                             } }  ?>
@@ -197,7 +197,7 @@
                         <?php if (isset($Page)&&!empty($Page)) { 
                         if ($Page+1<=$PostPagination){?>
                             <li class="page-item">
-                                <a href="blog.php?page=<?php echo $Page+1; ?>" class="page-link">&raquo;</a>
+                                <a href="index.php?page=<?php echo $Page+1; ?>" class="page-link">&raquo;</a>
                             </li>
                         <?php } } ?>
                     </ul>

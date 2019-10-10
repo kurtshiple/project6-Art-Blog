@@ -91,14 +91,14 @@
                     $PostIdFromURL = $_GET["id"];
                     if (!isset($PostIdFromURL)){
                         $_SESSION["ErrorMessage"]="Bad Request.";
-                        Redirect_to("blog.php?page=1");
+                        Redirect_to("index.php?page=1");
                     }
                     $sql = "SELECT * FROM posts WHERE id = '$PostIdFromURL'";
                     $stmt = $ConnectingDB->query($sql);
                     $Result=$stmt->rowcount();
                     if ($Result!=1) {
                         $_SESSION["ErrorMessage"]="Bad Request.";
-                        Redirect_to("blog.php?page=1");
+                        Redirect_to("index.php?page=1");
                     }
                 }
                 while ($DataRows = $stmt->fetch()) {
@@ -117,7 +117,7 @@
                     <img src="uploads/<?php echo htmlentities($Image); ?>" style="min-height:450px; padding:10px" class="img-fluid card-img-top"/>
                     <div class="card-body">
                         <h4 class="card-title"><?php echo htmlentities($PostTitle); ?></h4>
-                        <span class="badge badge-dark">Category: <a href="blog.php?category=<?php echo htmlentities($Category); ?>"><?php echo htmlentities($Category); ?></a></span> & Written By <a href="profile.php?username=<?php echo htmlentities($Admin); ?>"><?php echo htmlentities($Admin); ?></a> On <?php echo htmlentities($DateTime); ?>
+                        <span class="badge badge-dark">Category: <a href="index.php?category=<?php echo htmlentities($Category); ?>"><?php echo htmlentities($Category); ?></a></span> & Written By <a href="profile.php?username=<?php echo htmlentities($Admin); ?>"><?php echo htmlentities($Admin); ?></a> On <?php echo htmlentities($DateTime); ?>
                         <span style="float:right;" class="badge badge-dark">Comments: 
                         <?php echo ApproveCommentsAccordingToPost($PostID); ?>
                         </span>

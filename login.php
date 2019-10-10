@@ -48,7 +48,7 @@ if (isset($_POST["Submit"])){
     <div style="height: 10px; background: #88E17B;"></div>
     <nav class="navbar navbar-expand-lg navbar-dark" style="background-color: #0CA3BA;">
         <div class="container">
-            <a href="blog.php" class="navbar-brand">MARYSART.COM</a>
+            <a href="index.php" class="navbar-brand">MARYSART.COM</a>
             <button class="navbar-toggler" data-toggle="collapse" data-target="#navbarcollapseCMS">
                 <span class="navbar-toggler-icon"></span>
             </button>

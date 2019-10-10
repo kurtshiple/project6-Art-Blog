@@ -26,7 +26,7 @@
                     <a href="comments.php" class="nav-link text-white"><i class="fas fa-comments"></i> Comments</a>
                 </li>
                 <li class="nav-item">
-                    <a href="blog.php?page=1" class="nav-link text-white" target="_blank"><i class="fab fa-elementor"></i> Live Site</a>
+                    <a href="index.php" class="nav-link text-white" target="_blank"><i class="fab fa-elementor"></i> Live Site</a>
                 </li>
             </ul>
             <ul class="navbar-nav ml-auto">

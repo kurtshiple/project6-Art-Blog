@@ -3,7 +3,7 @@
         <div class="container">
             <div class="row">
                 <div class="col">
-                    <p class="lead text-center">Theme By | Kurt Shiple | <span id="year"></span> &copy; ----All Rights Reserved.</p>
+                    <p class="lead text-center">Built and Designed By | Kurt Shiple | <span id="year"></span> &copy; ----All Rights Reserved.</p>
                 </div>
             </div>
         </div>
